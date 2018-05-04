@@ -20,13 +20,14 @@ const mapDispatchToProps = dispatch => {
 class AppShell extends Component {
   render() {
     return (
-      <div className={styles.app}>
+      <div>
         <Header
           search={true}
+          searchOpenOnLoad={false}
           location={this.props.location}
           getUserLocation={this.props.getUserLocation}
         />
-        <main className={styles.appContent}>
+        <main className={styles.app}>
           <div className="container">
             <div className="row">
               <div className="col-md-12">

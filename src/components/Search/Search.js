@@ -101,6 +101,23 @@ const HeaderSearchSuggestions = ({
   ];
   const links = suggestions || quickLinks;
 
+  const getSearchUrl = type => {
+    let url = '';
+
+    switch (type.toLowerCase()) {
+      case 'mall':
+        url = '/mall/mall-short-name';
+        break;
+      case 'tenant':
+        url = '/brand/base-tenant-short-name';
+        break;
+      default:
+        url = '/search/';
+        break;
+    }
+
+    return url;
+  };
   return (
     <div
       className={[
@@ -123,7 +140,7 @@ const HeaderSearchSuggestions = ({
           >
             {links.map((item, id) => (
               <a
-                href={item.href || 'https://www.simon.com'}
+                href={item.href || getSearchUrl(item.type)}
                 className={[
                   suggestions
                     ? styles.headerSearchSuggestionsLink

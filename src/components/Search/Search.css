@@ -1,5 +1,4 @@
-@import './../../variables.css';
-
+@import './../../styles/variables.css';
 .headerSearch,
 .headerSearchSuggestions {
   background-color: rgba(0, 0, 0, 0.85);
@@ -149,17 +148,16 @@
 }
 
 /* Desktop Styles */
+
 @media (--md-viewport-up) {
   .headerSearchFindNearbyButton {
     display: flex;
     flex: 0 0 auto;
     justify-content: flex-end;
   }
-
   .headerSearchFindNearbyButton > :not(.headerSearchFindNearbyIcon) {
     display: inline-flex;
   }
-
   .headerSearchFindNearbyIcon {
     margin-right: 15px;
     width: auto;
@@ -172,35 +170,29 @@
   .headerSearchQuickLinks {
     flex-direction: row;
   }
-
   .headerSearch,
   .headerSearch.darken {
     background-color: rgba(0, 0, 0, 0.8);
   }
-
   .headerSearch,
   .headerSearchSuggestions {
     background-color: rgba(0, 0, 0, 0.8);
     height: auto;
   }
-
   .headerSearchQuickLinksHeader {
     margin-right: 15px;
     flex: 0 0 200px;
   }
-
   .headerSearchQuickLinks {
     flex-wrap: wrap;
     flex: 0 0 400px;
   }
-
   .headerSearchQuickLink {
     flex: 1 0 200px;
     margin-bottom: 1.6152rem;
     margin-top: 5px;
     padding: 0;
   }
-
   .headerSearchSuggestionsList {
     flex: 1 0 auto;
   }

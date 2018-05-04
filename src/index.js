@@ -9,7 +9,7 @@ import appReducer from './reducers/App';
 import loadFonts from './loadFonts';
 import '!style-loader!css-loader!bootstrap/dist/css/bootstrap-reboot.min.css';
 import '!style-loader!css-loader!bootstrap/dist/css/bootstrap-grid.min.css';
-import './index.css';
+import './styles/index.css';
 
 const store = createStore(appReducer, applyMiddleware(thunk));
 

@@ -84,7 +84,7 @@ class Header extends Component {
     super(props);
 
     this.state = {
-      searchOpen: false,
+      searchOpen: this.props.searchOpenOnLoad || false,
       navOpen: false
     };
 
@@ -97,17 +97,19 @@ class Header extends Component {
   }
 
   toggleNav() {
+    const htmlTag = document.documentElement;
     this.setState({ navOpen: !this.state.navOpen, searchOpen: false }, () => {
       if (this.state.navOpen) {
-        document.documentElement.classList.add(styles.headerNavOpen);
+        htmlTag.classList.add(styles.headerNavOpen);
       } else {
-        document.documentElement.classList.remove(styles.headerNavOpen);
+        htmlTag.classList.remove(styles.headerNavOpen);
       }
     });
   }
 
   render() {
     const { navOpen, searchOpen } = this.state;
+    const { search, location, getUserLocation } = this.props;
 
     return (
       <div>
@@ -117,7 +119,7 @@ class Header extends Component {
               <HeaderNavButton onClick={this.toggleNav} navOpen={navOpen} />
               <HeaderLogo url={'https://www.simon.com'} />
               <HeaderNav navOpen={navOpen} />
-              {this.props.search && (
+              {search && (
                 <HeaderSearchButton
                   onClick={this.toggleSearch}
                   searchOpen={searchOpen}
@@ -126,11 +128,8 @@ class Header extends Component {
             </div>
           </div>
         </header>
-        <FadeInDown in={this.props.search && searchOpen} duration={300}>
-          <Search
-            location={this.props.location}
-            getUserLocation={this.props.getUserLocation}
-          />
+        <FadeInDown in={search && searchOpen} duration={300}>
+          <Search location={location} getUserLocation={getUserLocation} />
         </FadeInDown>
       </div>
     );

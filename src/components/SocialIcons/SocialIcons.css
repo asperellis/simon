@@ -1,5 +1,6 @@
 .socialIcons {
   display: flex;
+  flex-wrap: wrap;
 }
 
 .socialIconLink + .socialIconLink {

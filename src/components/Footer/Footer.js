@@ -3,23 +3,12 @@ import styles from './Footer.css';
 import SearchIcon from './../../images/icons/search.svg';
 import SocialIcons from './../SocialIcons/SocialIcons';
 
-const FooterBanner = props => {
+const FooterSocialAndSearch = () => {
   return (
-    <div className={styles.footerBanner}>
-      <a
-        href={props.href}
-        className={[styles.footerBannerLink, 'bold'].join(' ')}
-      >
-        {props.text}
-      </a>
-    </div>
-  );
-};
-
-const FooterSocial = () => {
-  return (
-    <div className={['row', styles.footerRow].join(' ')}>
+    <div className={[styles.footerRow].join(' ')}>
       <SocialIcons
+        width={25}
+        height={25}
         facebook={'https://www.facebook.com'}
         twitter={'https://www.twitter.com'}
         youtube={'https://www.youtube.com'}
@@ -43,89 +32,82 @@ const FooterSocial = () => {
   );
 };
 
-const FooterLinksColumn = ({ name, links }) => {
-  return (
-    <div className={styles.footerLinksColumn}>
-      <div className={['bold', styles.footerLinkHeader].join(' ')}>{name}</div>
-      <nav>
-        {links.map(l => (
-          <a
-            className={styles.footerLink}
-            href={l.href}
-            key={l.text}
-            title={l.text}
-          >
-            {l.text}
-          </a>
-        ))}
-      </nav>
-    </div>
-  );
-};
-
 const FooterLinks = () => {
+  const linkGroups = [
+    {
+      name: 'Learn More',
+      links: [
+        { href: 'http://business.simon.com/about', text: 'About Simon' },
+        { href: 'http://www.simon.com/mall', text: 'See All Properties' },
+        { href: 'https://www.simon.com/travel', text: 'Travel & Tourism' },
+        { href: 'http://www.simon.com/brands', text: 'Brands' }
+      ]
+    },
+    {
+      name: 'More From Simon',
+      links: [
+        { href: 'http://www.simon.com/foundatsimon', text: '#foundatsimon' },
+        { href: 'https://said.simon.com/', text: 'Simon SAID' },
+        { href: 'https://family.simon.com/', text: 'Family at Simon' },
+        { href: 'http://syf.org/', text: 'Simon Youth Foundation' }
+      ]
+    },
+    {
+      name: 'Simon Giftcards®',
+      links: [
+        {
+          href: 'https://www.simon.com/giftcard/',
+          text: 'Purchase a Giftcard'
+        },
+        {
+          href: 'https://www.simon.com/giftcard/account_register.aspx',
+          text: 'Register Your Card'
+        },
+        {
+          href: 'https://www.simon.com/giftcard/card_balance.aspx',
+          text: 'Check Your Balance'
+        },
+        { href: 'https://www.simon.com/volume/', text: 'Corporate Sales' }
+      ]
+    },
+    {
+      name: 'Business Opportunities',
+      links: [
+        { href: 'http://business.simon.com/advertising', text: 'Advertising' },
+        { href: 'https://business.simon.com/leasing', text: 'Leasing' },
+        {
+          href: 'http://business.simon.com/property-services',
+          text: 'Property Services'
+        },
+        {
+          href: 'http://business.simon.com/retailer-marketing',
+          text: 'Retailer Marketing'
+        }
+      ]
+    }
+  ];
+
   return (
-    <div className={['row', styles.footerLinks].join(' ')}>
-      <FooterLinksColumn
-        name={'Learn More'}
-        links={[
-          { href: 'http://business.simon.com/about', text: 'About Simon' },
-          { href: 'http://www.simon.com/mall', text: 'See All Properties' },
-          { href: 'https://www.simon.com/travel', text: 'Travel & Tourism' },
-          { href: 'http://www.simon.com/brands', text: 'Brands' }
-        ]}
-      />
-      <FooterLinksColumn
-        name={'More From Simon'}
-        links={[
-          {
-            href: 'http://www.simon.com/foundatsimon',
-            text: '#foundatsimon'
-          },
-          { href: 'https://said.simon.com/', text: 'Simon SAID' },
-          { href: 'https://family.simon.com/', text: 'Family at Simon' },
-          {
-            href: 'http://syf.org/',
-            text: 'Simon Youth Foundation'
-          }
-        ]}
-      />
-      <FooterLinksColumn
-        name={'Simon Giftcards®'}
-        links={[
-          {
-            href: 'https://www.simon.com/giftcard/',
-            text: 'Purchase a Giftcard'
-          },
-          {
-            href: 'https://www.simon.com/giftcard/account_register.aspx',
-            text: 'Register Your Card'
-          },
-          {
-            href: 'https://www.simon.com/giftcard/card_balance.aspx',
-            text: 'Check Your Balance'
-          },
-          { href: 'https://www.simon.com/volume/', text: 'Corporate Sales' }
-        ]}
-      />
-      <FooterLinksColumn
-        name={'Business Opportunities'}
-        links={[
-          {
-            href: 'http://business.simon.com/advertising',
-            text: 'Advertising'
-          },
-          { href: 'https://business.simon.com/leasing', text: 'Leasing' },
-          {
-            href: 'http://business.simon.com/property-services',
-            text: 'Property Services'
-          },
-          {
-            href: 'http://business.simon.com/retailer-marketing',
-            text: 'Retailer Marketing'
-          }
-        ]}
-      />
+    <div className={styles.footerLinks}>
+      {linkGroups.map(group => (
+        <div className={styles.footerLinksColumn} key={group.name}>
+          <div className={[styles.footerLinkHeader, 'bold'].join(' ')}>
+            {group.name}
+          </div>
+          <nav>
+            {group.links.map(link => (
+              <a
+                className={styles.footerLink}
+                href={link.href}
+                key={link.text}
+                title={link.text}
+              >
+                {link.text}
+              </a>
+            ))}
+          </nav>
+        </div>
+      ))}
     </div>
   );
 };
@@ -133,12 +115,14 @@ const FooterLinks = () => {
 const Footer = () => {
   return (
     <footer className={styles.footer}>
-      <FooterBanner
-        text={'BECOME A MALL INSIDER. JOIN TODAY'}
+      <a
         href={'https://www.simon.com/mall-insider'}
-      />
+        className={[styles.footerBannerLink, 'bold'].join(' ')}
+      >
+        {'BECOME A MALL INSIDER. JOIN TODAY'}
+      </a>
       <div className="container">
-        <FooterSocial />
+        <FooterSocialAndSearch />
         <FooterLinks />
         <div className={styles.footerLegal}>
           {

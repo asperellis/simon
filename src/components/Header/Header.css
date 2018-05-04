@@ -1,4 +1,4 @@
-@import './../../variables.css';
+@import './../../styles/variables.css';
 
 .header {
   background-color: #000;
@@ -142,16 +142,13 @@
   width: 26px;
 }
 
-/* Desktop Styles */
 @media (--lg-viewport-up) {
   .headerLogo {
     flex: 0;
   }
-
   .headerNavBtn {
     display: none;
   }
-
   .headerNav {
     display: flex;
     flex: 1;
@@ -167,14 +164,12 @@
     transition: none;
     transform: translateX(0);
   }
-
   .headerNavLink {
     display: inline-block;
     border: none;
     padding: calc((74px - 16px) / 2) 0;
     font-size: 0.6414rem;
   }
-
   .headerNavLink + .headerNavLink {
     margin-left: 1.9152rem;
   }
