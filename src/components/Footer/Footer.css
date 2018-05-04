@@ -1,0 +1,140 @@
+@import './../../variables.css';
+
+.footer {
+  min-height: 100px;
+  background-color: #fff;
+  padding: 0 0 50px;
+  font-size: 0.76968rem;
+}
+
+.footerBanner {
+  text-align: center;
+  background-color: #000;
+}
+
+.footerBannerLink {
+  color: #fff;
+  font-size: 0.6414rem;
+  letter-spacing: 0.05em;
+  width: 100%;
+  padding: 3px 0 2px;
+  display: block;
+}
+
+.footerBannerLink:hover {
+  color: #fff;
+  text-decoration: none;
+}
+
+.footerSearchLink {
+  display: none;
+}
+
+.footerSearchLink:hover {
+  color: #000;
+  text-decoration: none;
+}
+
+.footerSearchIcon {
+  margin-right: 12px;
+}
+
+.footerRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 1.9152rem;
+}
+
+.footerLinks {
+  margin-top: 1.9152rem;
+  border-top: 1px solid #b4b2b0;
+  display: flex;
+  flex-direction: column;
+}
+
+.footerLinksColumn {
+  flex: 1 0 100%;
+}
+
+.footerLinksColumn:not(:nth-child(-n + 2)),
+.footerLinksColumn:nth-child(2)
+  .footerLink:not(:first-of-type):not(:nth-child(3)) {
+  display: none;
+}
+
+.footerLinkHeader {
+  display: none;
+}
+
+.footerLink {
+  color: #757575;
+  text-decoration: none;
+  transition: color 0.3s ease-out;
+  display: block;
+  padding: 1.33rem 0.86806rem;
+  border-bottom: 1px solid #b4b2b0;
+  font-size: 0.9256rem;
+}
+
+.footerLink:hover {
+  color: #000;
+  text-decoration: none;
+}
+
+.footerLegal {
+  margin-top: 3.30947rem;
+}
+
+@media (--md-viewport-up) {
+  .footerLinks {
+    justify-content: space-between;
+  }
+
+  .footerLinksColumn {
+    flex: 1 0 auto;
+  }
+
+  .footerLinksColumn:not(:nth-child(-n + 2)),
+  .footerLinksColumn:nth-child(2)
+    .footerLink:not(:first-of-type):not(:nth-child(3)) {
+    display: block;
+  }
+
+  .footerLinks {
+    padding-top: 1.9152rem;
+    justify-content: flex-start;
+    flex-direction: row;
+  }
+
+  .footerLink {
+    padding: 0;
+    border-bottom: none;
+    font-size: 0.76968rem;
+  }
+
+  .footerLinkHeader {
+    display: block;
+  }
+
+  .footerLink:first-of-type {
+    margin-top: 0.6414rem;
+  }
+}
+
+/* Desktop Styles */
+@media (--lg-viewport-up) {
+  .footerSearchLink {
+    display: flex;
+    color: #000;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footerRow {
+    justify-content: space-between;
+  }
+  .footerLinksColumn {
+    flex: 0 0 18%;
+  }
+}

@@ -1,0 +1,30 @@
+:root {
+  /* Colors */
+
+  --brand-primary: #9f005b; /* plum */
+  --brand-secondary: #008f94; /* teal */
+  --brand-primary-forum: #f5bd47; /* gold */
+  --brand-primary-mills: #f4763b; /* orange */
+  --brand-gray: #b4b2b0; /* simon gray */
+  --brand-error: #9f005b; /* also plum */
+  --brand-success: #008f94; /* also teal */
+  --white: #fff;
+  --black: #000;
+  --gray-lighter: #f1f1f1;
+  --gray-light: #ebebeb;
+  --gray: #757575;
+  --gray-dark: #58595a;
+  --gray-darker: #333;
+
+  @custom-media --xl-viewport-up (min-width: 1200px);
+  @custom-media --lg-viewport-up (min-width: 992px);
+  @custom-media --md-viewport-up (min-width: 768px);
+  @custom-media --sm-viewport-up (min-width: 544px);
+  @custom-media --xl-viewport-down (max-width: 1199px);
+  @custom-media --lg-viewport-down (max-width: 991px);
+  @custom-media --md-viewport-down (max-width: 767px);
+  @custom-media --sm-viewport-down (max-width: 543px);
+  @custom-media --retina-in-dpi (min-resolution: 192dpi);
+  @custom-media --retina-in-dppx (min-resolution: 2dppx);
+  @custom-media --retina (min-resolution: 192dpi), (min-resolution: 2dppx);
+}

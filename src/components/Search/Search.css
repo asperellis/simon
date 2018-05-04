@@ -1,0 +1,207 @@
+@import './../../variables.css';
+
+.headerSearch,
+.headerSearchSuggestions {
+  background-color: rgba(0, 0, 0, 0.85);
+  position: fixed;
+  left: 0;
+  right: 0;
+  color: #fff;
+  font-size: 1.10833rem;
+  height: 74px;
+  top: 74px;
+  z-index: 1;
+}
+
+.headerSearchSuggestions:not(.show) > * {
+  opacity: 0;
+  transition: opacity 300ms ease 0;
+}
+
+.headerSearchSuggestions.show > * {
+  opacity: 1;
+  transition: opacity 300ms ease 300ms;
+}
+
+.headerSearch.darken {
+  background-color: rgba(0, 0, 0, 1);
+}
+
+.headerSearchForm,
+.headerSearchFindNearbyButton {
+  display: flex;
+  align-items: center;
+  height: 74px;
+  color: #fff;
+  position: relative;
+  flex: 1;
+}
+
+.headerSearchBar {
+  display: flex;
+  align-items: center;
+}
+
+.headerSearchInput {
+  flex: 2 1 calc(100vw - 121px);
+  max-width: calc(100vw - 121px);
+  height: 50px;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  color: #fff;
+  overflow: hidden;
+  padding: 0 15px;
+  z-index: 2;
+}
+
+.headerSearchLabel {
+  position: absolute;
+  left: 38px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100vw - 121px);
+  margin: 0;
+  z-index: 1;
+}
+
+.headerSearchFindNearbyButton {
+  color: #b4b2b0;
+  transition: color 0.3s ease-in;
+  flex: 0 0 38px;
+}
+
+.headerSearchFindNearbyButton:hover {
+  color: #fff;
+}
+
+.headerSearchFindNearbyButton:hover .headerSearchFindNearbyIcon {
+  fill: #fff;
+}
+
+.headerSearchFindNearbyButton > :not(.headerSearchFindNearbyIcon) {
+  display: none;
+}
+
+.headerSearchFindNearbyIcon {
+  margin-left: 15px;
+  width: 23px;
+  height: 23px;
+  transition: fill 0.3s ease-in;
+}
+
+.headerSearchSuggestions {
+  border-top: 1px solid #59595b;
+  padding: calc((74px - 1.10833rem) / 2) 0;
+  height: calc(100vh - 74px * 2);
+  background-color: rgba(0, 0, 0, 1);
+  top: calc(74px);
+}
+
+.headerSearchSuggestionsContent,
+.headerSearchQuickLinks {
+  display: flex;
+  flex-direction: column;
+}
+
+.headerSearchQuickLinksHeader {
+  flex: 1 0 0;
+  margin-bottom: 15px;
+}
+
+.headerSearchQuickLinks {
+  flex: 1 0 auto;
+}
+
+.headerSearchQuickLink,
+.headerSearchSuggestionsLink {
+  color: #b4b2b0;
+  font-size: 0.9256rem;
+  transition: color 0.3s ease-in;
+  flex: 1 0 auto;
+  padding: 10px 0.95rem;
+}
+
+.headerSearchQuickLink:nth-last-child(-n + 2) {
+  margin-bottom: 0;
+}
+
+.headerSearchQuickLink:hover {
+  color: #fff;
+  text-decoration: none;
+}
+
+.headerSearchSuggestionsLink {
+  display: block;
+  cursor: pointer;
+  line-height: 1;
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.headerSearchSuggestionsLink:hover,
+.headerSearchSuggestionsLink:active,
+.headerSearchSuggestionsLink:focus,
+.headerSearchSuggestionsLink.active {
+  background-color: #000;
+  color: #fff;
+  text-decoration: none;
+}
+
+/* Desktop Styles */
+@media (--md-viewport-up) {
+  .headerSearchFindNearbyButton {
+    display: flex;
+    flex: 0 0 auto;
+    justify-content: flex-end;
+  }
+
+  .headerSearchFindNearbyButton > :not(.headerSearchFindNearbyIcon) {
+    display: inline-flex;
+  }
+
+  .headerSearchFindNearbyIcon {
+    margin-right: 15px;
+    width: auto;
+    height: auto;
+  }
+}
+
+@media (--lg-viewport-up) {
+  .headerSearchSuggestionsContent,
+  .headerSearchQuickLinks {
+    flex-direction: row;
+  }
+
+  .headerSearch,
+  .headerSearch.darken {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+
+  .headerSearch,
+  .headerSearchSuggestions {
+    background-color: rgba(0, 0, 0, 0.8);
+    height: auto;
+  }
+
+  .headerSearchQuickLinksHeader {
+    margin-right: 15px;
+    flex: 0 0 200px;
+  }
+
+  .headerSearchQuickLinks {
+    flex-wrap: wrap;
+    flex: 0 0 400px;
+  }
+
+  .headerSearchQuickLink {
+    flex: 1 0 200px;
+    margin-bottom: 1.6152rem;
+    margin-top: 5px;
+    padding: 0;
+  }
+
+  .headerSearchSuggestionsList {
+    flex: 1 0 auto;
+  }
+}

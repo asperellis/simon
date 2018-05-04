@@ -1,0 +1,7 @@
+.socialIcons {
+  display: flex;
+}
+
+.socialIconLink + .socialIconLink {
+  margin-left: 1.8512rem;
+}
