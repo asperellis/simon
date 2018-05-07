@@ -17,7 +17,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-class AppShell extends Component {
+class App extends Component {
   render() {
     return (
       <div>
@@ -30,18 +30,7 @@ class AppShell extends Component {
         <main className={styles.app}>
           <div className="container">
             <div className="row">
-              <div className="col-md-12">
-                <h1>This is a React Simon Wrapper</h1>
-                <p>
-                  {this.props.location &&
-                    'Your Location is Lat: ' +
-                      (this.props.location && this.props.location.latitude) +
-                      ' Long: ' +
-                      (this.props.location && this.props.location.longitude)}
-                </p>
-                <p>To test out the possibility of using on business site.</p>
-                <p>Data and Store handling still needed</p>
-              </div>
+              <div className="col-md-12">{this.props.children}</div>
             </div>
           </div>
         </main>
@@ -51,6 +40,4 @@ class AppShell extends Component {
   }
 }
 
-const App = connect(mapStateToProps, mapDispatchToProps)(AppShell);
-
-export default App;
+export default connect(mapStateToProps, mapDispatchToProps)(App);
