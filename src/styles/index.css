@@ -87,9 +87,7 @@ button {
   font-weight: 700;
 }
 
-a:focus,
-input:focus,
-button:focus {
+[data-whatintent='keyboard'] *:focus {
   outline-color: var(--brand-primary);
 }
 
