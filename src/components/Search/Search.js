@@ -5,6 +5,7 @@ import NavIcon from './../../images/icons/nav.svg';
 import FadeInRight from './../Animations/FadeInRight';
 import ExpandDown from './../Animations/ExpandDown';
 import API from './../../api/api';
+import { Link } from 'react-router-dom';
 import { debounce } from './../../utils/utils';
 
 const HeaderSearchButton = ({ onClick, ...attributes }) => {
@@ -139,19 +140,18 @@ const HeaderSearchSuggestions = ({
             }
           >
             {links.map((item, id) => (
-              <a
-                href={item.href || getSearchUrl(item.type)}
+              <Link
+                to={item.href || getSearchUrl(item.type)}
                 className={[
                   suggestions
                     ? styles.headerSearchSuggestionsLink
                     : styles.headerSearchQuickLink,
                   `${cursor === id + 1 && suggestions ? styles.active : ''}`
                 ].join(' ')}
-                title={item.text}
                 key={item.text + id}
               >
                 {item.text}
-              </a>
+              </Link>
             ))}
           </div>
         </div>
@@ -175,29 +175,32 @@ class Search extends Component {
     this.updateQuery = this.updateQuery.bind(this);
     this.performSearch = this.performSearch.bind(this);
     this.toggleSuggestions = this.toggleSuggestions.bind(this);
-    this.debounceSearch = this.debounceSearch.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
   }
 
+  // for animations
   componentDidMount() {
     this.setState({ mounted: !this.state.mounted });
   }
 
+  // takes a boolean to show suggestions or not for search
   toggleSuggestions(showSuggestions) {
     this.setState({ showSuggestions });
   }
 
+  // updates the query based on inputs value
   updateQuery(event) {
     const query = event.target.value;
-    this.setState({ query }, this.debounceSearch);
+    this.setState({ query }, this.getSearchSuggestions);
   }
 
+  // key down handler for search input. moves cursor for autocomplete
+  // and searches for selected sugessted value on enter
   handleKeyDown(event) {
     const { cursor, querySuggestions } = this.state;
     if (querySuggestions) {
       switch (event.key) {
         case 'ArrowDown':
-          // Do something for "down arrow" key press.
           if (cursor < querySuggestions.length) {
             this.setState(prevState => ({
               cursor: prevState.cursor + 1
@@ -205,7 +208,6 @@ class Search extends Component {
           }
           break;
         case 'ArrowUp':
-          // Do something for "up arrow" key press.
           if (cursor > 0) {
             this.setState(prevState => ({
               cursor: prevState.cursor - 1
@@ -214,7 +216,7 @@ class Search extends Component {
           break;
         case 'Enter':
           event.preventDefault();
-          // console.log(`Search for Value ${querySuggestions[cursor].text}`);
+          this.performSearch(null, querySuggestions[cursor].text);
           break;
         default:
           this.setState({
@@ -225,11 +227,8 @@ class Search extends Component {
     }
   }
 
-  performSearch(event) {
-    if (event) {
-      event.preventDefault();
-    }
-
+  // calls autocomplete api to get search suggestions with a debounce
+  getSearchSuggestions = debounce(() => {
     if (this.state.query.length > 2) {
       API.getSearchSuggestions(this.state.query).then(data => {
         this.setState({
@@ -238,11 +237,23 @@ class Search extends Component {
         });
       });
     } else {
-      this.setState({ querySuggestions: null, cursor: 0 });
+      this.setState({
+        querySuggestions: null,
+        cursor: 0
+      });
     }
-  }
+  }, 500);
 
-  debounceSearch = debounce(this.performSearch, 500);
+  // executes a search action with the query from state or given
+  performSearch(event, query = '') {
+    if (event) {
+      event.preventDefault();
+    }
+    // can we use the router for this redir?
+    document.location.href = `/search/${encodeURIComponent(
+      query || this.state.query
+    )}`;
+  }
 
   render() {
     return (

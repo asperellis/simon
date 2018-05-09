@@ -38,7 +38,7 @@ const cssFilename = 'static/css/[name].[contenthash:8].css';
 // To have this structure working with relative paths, we have to use custom options.
 const extractTextPluginOptions = shouldUseRelativeAssetPaths
   ? // Making sure that the publicPath goes back to to build folder.
-  { publicPath: Array(cssFilename.split('/').length).join('../') }
+    { publicPath: Array(cssFilename.split('/').length).join('../') }
   : {};
 
 // This is the production configuration.
@@ -191,8 +191,8 @@ module.exports = {
                   loader: require.resolve('css-loader'),
                   options: {
                     importLoaders: 1,
-                    // localIdentName: '[name]__[local]___[hash:base64:5]',
-                    // modules: true,
+                    localIdentName: '[name]__[local]___[hash:base64:5]',
+                    modules: true,
                     minimize: true,
                     sourceMap: true
                   }
@@ -204,9 +204,6 @@ module.exports = {
                     plugins: () => [
                       require('precss'),
                       require('postcss-cssnext')
-                      // require("postcss-import"),
-                      // require("postcss-mixins"),
-                      // require("postcss-nested"),
                     ]
                   }
                 }

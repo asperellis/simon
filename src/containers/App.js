@@ -27,7 +27,7 @@ class App extends Component {
           location={this.props.location}
           getUserLocation={this.props.getUserLocation}
         />
-        <main className={styles.app}>
+        <main className={styles.app} id="site-content" tabIndex="-1">
           <div className="container">
             <div className="row">
               <div className="col-md-12">{this.props.children}</div>
