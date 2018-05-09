@@ -35,8 +35,11 @@ const SocialIcons = ({
 
         const Icon = icons[network];
         return (
-          <a
-            href={networks[network]}
+          <button
+            aria-label={network}
+            onClick={() => {
+              document.location.href = networks[network];
+            }}
             key={network}
             className={styles.socialIconLink}
           >
@@ -47,7 +50,7 @@ const SocialIcons = ({
               viewBox={'0 0 ' + width + ' ' + height}
               className={styles.socialIcon}
             />
-          </a>
+          </button>
         );
       })}
     </div>

@@ -1,15 +1,15 @@
 import { combineReducers } from 'redux';
 
-const location = (state = null, action) => {
+const user = (state = { location: null }, action) => {
   if (action.type === 'GET_USER_LOCATION') {
-    return action.location;
+    return { ...state, location: action.location };
   }
 
   return state;
 };
 
 const appReducer = combineReducers({
-  location
+  user
 });
 
 export default appReducer;

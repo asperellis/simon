@@ -7,7 +7,12 @@ module.exports = {
     'jest/globals': true
   },
 
-  extends: ['eslint:recommended', 'plugin:react/recommended', 'prettier'],
+  extends: [
+    'eslint:recommended',
+    'plugin:react/recommended',
+    'prettier',
+    'plugin:jsx-a11y/recommended'
+  ],
 
   globals: {
     _gaq: true,
@@ -35,7 +40,7 @@ module.exports = {
     CustomEvent: true
   },
 
-  plugins: ['react', 'jest'],
+  plugins: ['react', 'jest', 'jsx-a11y'],
 
   rules: {
     // POSSBLE ERRORS
@@ -494,6 +499,23 @@ module.exports = {
     'no-bitwise': 0,
     // disallow use of unary operators, ++ and --
     'no-plusplus': 0,
-    'react/prop-types': [0]
+    'react/prop-types': [0],
+
+    // a11y Rules
+    'jsx-a11y/label-has-for': [
+      2,
+      {
+        required: {
+          every: ['id']
+        },
+        allowChildren: false
+      }
+    ],
+    'jsx-a11y/no-autofocus': [
+      0,
+      {
+        ignoreNonDOM: true
+      }
+    ]
   }
 };

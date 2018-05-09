@@ -32,6 +32,7 @@ const HeaderSearchForm = ({
   query,
   handleKeyDown,
   toggleSuggestions,
+  autoFocus,
   ...attributes
 }) => {
   return (
@@ -49,7 +50,7 @@ const HeaderSearchForm = ({
       )}
       <input
         type="search"
-        autoFocus
+        autoFocus={autoFocus}
         className={styles.headerSearchInput}
         name="headerSearchInput"
         id="headerSearchInput"
@@ -106,12 +107,12 @@ const HeaderSearchSuggestions = ({
     let url = '';
 
     switch (type.toLowerCase()) {
-      case 'mall':
-        url = '/mall/mall-short-name';
-        break;
-      case 'tenant':
-        url = '/brand/base-tenant-short-name';
-        break;
+      // case 'mall':
+      //   url = '/mall/mall-short-name';
+      //   break;
+      // case 'tenant':
+      //   url = '/brand/base-tenant-short-name';
+      //   break;
       default:
         url = '/search/';
         break;
@@ -274,6 +275,7 @@ class Search extends Component {
                 toggleSuggestions={this.toggleSuggestions}
                 handleKeyDown={this.handleKeyDown}
                 query={this.state.query}
+                autoFocus={!this.props.searchOpenOnLoad}
               />
             </FadeInRight>
             <button

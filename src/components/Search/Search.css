@@ -52,6 +52,7 @@
   overflow: hidden;
   padding: 0 15px;
   z-index: 2;
+  outline: none;
 }
 
 .headerSearchLabel {

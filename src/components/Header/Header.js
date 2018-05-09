@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import Search from './../../components/Search/Search';
 import FadeInDown from './../Animations/FadeInDown';
 import styles from './Header.css';
@@ -11,15 +12,20 @@ const HeaderNavButton = ({ onClick, navOpen, ...attributes }) => {
     ' '
   );
   return (
-    <button className={classNames} onClick={onClick} {...attributes}>
+    <button
+      aria-label="Toggle Site Navigation"
+      className={classNames}
+      onClick={onClick}
+      {...attributes}
+    >
       <span className={styles.headerNavBtnIcon} />
     </button>
   );
 };
 
-const HeaderLogo = props => {
+const HeaderLogo = () => {
   return (
-    <a href={props.url} className={styles.headerLogo}>
+    <Link to="/" aria-label="Simon homepage" className={styles.headerLogo}>
       <Logo
         width={90.5}
         height={35.6}
@@ -27,7 +33,7 @@ const HeaderLogo = props => {
         viewBox={'0 0 90.5 35.6'}
         className={styles.headerLogoSvg}
       />
-    </a>
+    </Link>
   );
 };
 
@@ -66,6 +72,7 @@ const HeaderSearchButton = ({ onClick, searchOpen, ...attributes }) => {
     <button
       onClick={onClick}
       className={styles.headerSearchBtn}
+      aria-label="Search By Center Store or Location"
       {...attributes}
     >
       <Icon
@@ -109,27 +116,35 @@ class Header extends Component {
 
   render() {
     const { navOpen, searchOpen } = this.state;
-    const { search, location, getUserLocation } = this.props;
+    const { search, location, getUserLocation, searchOpenOnLoad } = this.props;
 
     return (
       <div>
+        <a href="#site-content" className={styles.headerSkipToContent}>
+          Skip To Content
+        </a>
         <header className={styles.header}>
           <div className="container">
             <div className={styles.headerContent}>
               <HeaderNavButton onClick={this.toggleNav} navOpen={navOpen} />
-              <HeaderLogo url={'https://www.simon.com'} />
+              <HeaderLogo />
               <HeaderNav navOpen={navOpen} />
               {search && (
                 <HeaderSearchButton
                   onClick={this.toggleSearch}
                   searchOpen={searchOpen}
+                  onFocus={searchOpenOnLoad || this.toggleSearch}
                 />
               )}
             </div>
           </div>
         </header>
         <FadeInDown in={search && searchOpen} duration={300}>
-          <Search location={location} getUserLocation={getUserLocation} />
+          <Search
+            location={location}
+            getUserLocation={getUserLocation}
+            searchOpenOnLoad={searchOpenOnLoad}
+          />
         </FadeInDown>
       </div>
     );

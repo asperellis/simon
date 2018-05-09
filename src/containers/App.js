@@ -3,11 +3,12 @@ import styles from './App.css';
 import Header from './../components/Header/Header';
 import Footer from './../components/Footer/Footer';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { getUserLocation } from './../actions/App';
 
 const mapStateToProps = state => {
   return {
-    location: state.location
+    user: state.user
   };
 };
 
@@ -24,7 +25,7 @@ class App extends Component {
         <Header
           search={true}
           searchOpenOnLoad={false}
-          location={this.props.location}
+          location={this.props.user.location}
           getUserLocation={this.props.getUserLocation}
         />
         <main className={styles.app} id="site-content" tabIndex="-1">
@@ -40,4 +41,4 @@ class App extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));

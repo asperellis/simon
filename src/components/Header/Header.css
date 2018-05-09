@@ -142,6 +142,34 @@
   width: 26px;
 }
 
+.headerSkipToContent {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  display: block;
+}
+
+.headerSkipToContent:focus {
+  background-color: var(--brand-primary);
+  color: #fff;
+  font-size: 18px;
+  padding: 0 24px;
+  left: 3px;
+  line-height: 64px;
+  top: 3px;
+  z-index: 10000;
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  width: auto;
+}
+
 @media (--lg-viewport-up) {
   .headerLogo {
     flex: 0;
