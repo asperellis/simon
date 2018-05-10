@@ -42,7 +42,11 @@ const HeaderSearchForm = ({
       className={styles.headerSearchForm}
       {...attributes}
     >
-      <HeaderSearchButton onClick={performSearch} type="submit" />
+      <HeaderSearchButton
+        onClick={performSearch}
+        type="submit"
+        aria-label="Search"
+      />
       {!query && (
         <label htmlFor="headerSearchInput" className={styles.headerSearchLabel}>
           {'Search by center, store or location'}
@@ -265,6 +269,7 @@ class Search extends Component {
           this.state.showSuggestions && styles.darken
         ].join(' ')}
         style={this.props.style}
+        role="search"
       >
         <div className="container">
           <div className={styles.headerSearchBar}>

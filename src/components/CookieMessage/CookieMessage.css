@@ -1,0 +1,30 @@
+@import './../../styles/variables.css';
+
+.cookieMessage {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: var(--brand-primary);
+  color: #fff;
+  text-align: center;
+  display: none;
+  padding: 10px 15px;
+}
+
+.cookieMessage p {
+  margin: 0;
+  line-height: 1;
+}
+
+.cookieMessage a {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.cookieMessage a:hover,
+.cookieMessage a:focus {
+  color: #fff;
+  text-decoration: underline;
+  outline-color: #fff;
+}

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styles from './App.css';
 import Header from './../components/Header/Header';
 import Footer from './../components/Footer/Footer';
+import CookieMessage from './../components/CookieMessage/CookieMessage';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { getUserLocation } from './../actions/App';
@@ -28,6 +29,7 @@ class App extends Component {
           location={this.props.user.location}
           getUserLocation={this.props.getUserLocation}
         />
+        <CookieMessage />
         <main className={styles.app} id="site-content" tabIndex="-1">
           <div className="container">
             <div className="row">

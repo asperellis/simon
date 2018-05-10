@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { ask } from 'what-input';
 import Search from './../../components/Search/Search';
 import FadeInDown from './../Animations/FadeInDown';
 import styles from './Header.css';
@@ -100,7 +101,12 @@ class Header extends Component {
   }
 
   toggleSearch() {
-    this.setState({ searchOpen: !this.state.searchOpen, navOpen: false });
+    this.setState(
+      { searchOpen: !this.state.searchOpen, navOpen: false },
+      () => {
+        document.documentElement.classList.remove(styles.headerNavOpen);
+      }
+    );
   }
 
   toggleNav() {
@@ -126,7 +132,15 @@ class Header extends Component {
         <header className={styles.header}>
           <div className="container">
             <div className={styles.headerContent}>
-              <HeaderNavButton onClick={this.toggleNav} navOpen={navOpen} />
+              <HeaderNavButton
+                onClick={this.toggleNav}
+                onFocus={() => {
+                  if (ask() === 'keyboard') {
+                    this.toggleNav();
+                  }
+                }}
+                navOpen={navOpen}
+              />
               <HeaderLogo />
               <HeaderNav navOpen={navOpen} />
               {search && (
