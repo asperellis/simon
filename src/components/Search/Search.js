@@ -201,6 +201,7 @@ class Search extends Component {
 
   // key down handler for search input. moves cursor for autocomplete
   // and searches for selected sugessted value on enter
+  // using +/- 1 to not have a selected suggestion on load
   handleKeyDown(event) {
     const { cursor, querySuggestions } = this.state;
     if (querySuggestions) {
@@ -220,8 +221,10 @@ class Search extends Component {
           }
           break;
         case 'Enter':
-          event.preventDefault();
-          this.performSearch(null, querySuggestions[cursor].text);
+          if (cursor > 0) {
+            event.preventDefault();
+            this.performSearch(null, querySuggestions[cursor - 1].text);
+          }
           break;
         default:
           this.setState({
@@ -230,6 +233,7 @@ class Search extends Component {
           break;
       }
     }
+    return true;
   }
 
   // calls autocomplete api to get search suggestions with a debounce
@@ -256,7 +260,7 @@ class Search extends Component {
     }
     // can we use the router for this redir?
     document.location.href = `/search/${encodeURIComponent(
-      query || this.state.query
+      query.toLowerCase() || this.state.query.toLowerCase()
     )}`;
   }
 

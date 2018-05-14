@@ -98,8 +98,5 @@
     "moduleNameMapper": {
       "^react-native$": "react-native-web"
     }
-  },
-  "dependencies": {
-    "normalize.css": "^8.0.0"
   }
 }

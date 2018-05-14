@@ -6,6 +6,7 @@ import CookieMessage from './../components/CookieMessage/CookieMessage';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { getUserLocation } from './../actions/App';
+import { docCookies } from './../utils/utils';
 
 const mapStateToProps = state => {
   return {
@@ -29,13 +30,9 @@ class App extends Component {
           location={this.props.user.location}
           getUserLocation={this.props.getUserLocation}
         />
-        <CookieMessage />
+        {!docCookies.getItem('seen_cookie_message') && <CookieMessage />}
         <main className={styles.app} id="site-content" tabIndex="-1">
-          <div className="container">
-            <div className="row">
-              <div className="col-md-12">{this.props.children}</div>
-            </div>
-          </div>
+          {this.props.children}
         </main>
         <Footer />
       </div>

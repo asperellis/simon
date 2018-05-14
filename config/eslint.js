@@ -418,7 +418,7 @@ module.exports = {
       {
         overrides: {
           if: { after: true },
-          for: { after: false },
+          for: { after: true },
           while: { after: false }
         }
       }

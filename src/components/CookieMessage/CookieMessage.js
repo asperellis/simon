@@ -1,26 +1,17 @@
 import React from 'react';
 import styles from './CookieMessage.css';
+import { docCookies } from './../../utils/utils';
 
 const CookieMessage = () => {
-  // check for the cookie
-  const seenCookieMessage =
-    document.cookie
-      .split(';')
-      .filter(item => item.includes('seen_cookie_message=')).length > 0;
-
-  if (!seenCookieMessage) {
-    // save a seen cookie cookie
-    const d = new Date();
-    // one month in advance
-    d.setMonth(d.getMonth() + 1);
-    // set the cookie
-    document.cookie = 'seen_cookie_message=true; expires=' + d.toUTCString();
-  }
-
+  // expire date
+  const d = new Date();
+  // one month in advance
+  d.setMonth(d.getMonth() + 1);
+  // set the cookie
+  docCookies.setItem('seen_cookie_message', true, d);
   return (
     <div
       className={styles.cookieMessage}
-      style={seenCookieMessage ? {} : { display: 'block' }}
       role="complementary"
       aria-label="Simon Cookie Policy"
     >

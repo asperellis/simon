@@ -41,6 +41,7 @@ const ExpandDown = ({ children, duration, delay = 0, in: inProp }) => {
         enter: 0,
         exit: duration
       }}
+      unmountOnExit
     >
       {status => {
         // Don't render anything if component has 'exited'.
