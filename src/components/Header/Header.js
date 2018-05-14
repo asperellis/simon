@@ -4,9 +4,9 @@ import { ask } from 'what-input';
 import Search from './../../components/Search/Search';
 import FadeInDown from './../Animations/FadeInDown';
 import styles from './Header.css';
-import Logo from './../../images/logos/simon.svg';
 import SearchIcon from './../../images/icons/search.svg';
 import CloseIcon from './../../images/icons/close.svg';
+import AdminLogo from './../../images/logos/premium-outlets.svg';
 
 const HeaderNavButton = ({ onClick, navOpen, ...attributes }) => {
   const classNames = [styles.headerNavBtn, navOpen ? styles.open : ''].join(
@@ -24,13 +24,14 @@ const HeaderNavButton = ({ onClick, navOpen, ...attributes }) => {
   );
 };
 
-const HeaderLogo = () => {
+const HeaderLogo = props => {
+  const Logo = props.Logo;
   return (
     <Link to="/" aria-label="Simon homepage" className={styles.headerLogo}>
       <Logo
         width={90.5}
         height={35.6}
-        fill={'#fff'}
+        fill={props.fill || '#fff'}
         viewBox={'0 0 90.5 35.6'}
         className={styles.headerLogoSvg}
       />
@@ -40,7 +41,7 @@ const HeaderLogo = () => {
 
 const HeaderNav = props => {
   // links in the header - default
-  const navLinks = [
+  const navLinks = props.links || [
     { text: 'SHOPPERS', href: 'https://www.simon.com' },
     { text: 'BUSINESS', href: 'https://www.simon.com' },
     { text: 'INVESTORS', href: 'https://www.simon.com' },
@@ -48,9 +49,11 @@ const HeaderNav = props => {
     { text: 'CONTACT', href: 'https://www.simon.com' }
   ];
 
-  const navClasses = [styles.headerNav, props.navOpen ? styles.open : ''].join(
-    ' '
-  );
+  const navClasses = [
+    styles.headerNav,
+    props.navOpen ? styles.open : '',
+    props.userLoggedIn ? styles.navAdminPad : ''
+  ].join(' ');
 
   return (
     <nav className={navClasses}>
@@ -87,12 +90,31 @@ const HeaderSearchButton = ({ onClick, searchOpen, ...attributes }) => {
   );
 };
 
+const AdminHeader = () => {
+  const navLinks = [
+    { text: 'HOME', href: 'https://www.simon.com' },
+    { text: 'PROFILE', href: 'https://www.simon.com' },
+    { text: 'CHANGE PASSWORD', href: 'https://www.simon.com' },
+    { text: 'LOGOUT', href: 'https://www.simon.com' }
+  ];
+  return (
+    <div className={styles.adminHeader}>
+      <div className="container">
+        <div className={styles.headerContent}>
+          <HeaderLogo Logo={AdminLogo} fill={'#000'} />
+          <HeaderNav links={navLinks} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
 class Header extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      searchOpen: this.props.searchOpenOnLoad || false,
+      searchOpen: !this.props.canToggle || false,
       navOpen: false
     };
 
@@ -122,45 +144,51 @@ class Header extends Component {
 
   render() {
     const { navOpen, searchOpen } = this.state;
-    const { search, location, getUserLocation, searchOpenOnLoad } = this.props;
+    const {
+      search,
+      location,
+      getUserLocation,
+      canToggle,
+      userLoggedIn
+    } = this.props;
 
     return (
-      <div>
+      <header className={styles.header}>
         <a href="#site-content" className={styles.headerSkipToContent}>
           Skip To Content
         </a>
-        <header className={styles.header}>
-          <div className="container">
-            <div className={styles.headerContent}>
-              <HeaderNavButton
-                onClick={this.toggleNav}
-                onFocus={() => {
-                  if (ask() === 'keyboard') {
-                    this.toggleNav();
-                  }
-                }}
-                navOpen={navOpen}
-              />
-              <HeaderLogo />
-              <HeaderNav navOpen={navOpen} />
-              {search && (
+        {userLoggedIn && <AdminHeader />}
+        <div className="container">
+          <div className={styles.headerContent}>
+            <HeaderNavButton
+              onClick={this.toggleNav}
+              onFocus={() => {
+                if (ask() === 'keyboard') {
+                  this.toggleNav();
+                }
+              }}
+              navOpen={navOpen}
+            />
+            <HeaderLogo Logo={this.props.Logo} />
+            <HeaderNav navOpen={navOpen} userLoggedIn={userLoggedIn} />
+            {search &&
+              canToggle && (
                 <HeaderSearchButton
                   onClick={this.toggleSearch}
                   searchOpen={searchOpen}
-                  onFocus={searchOpenOnLoad || this.toggleSearch}
+                  onFocus={!canToggle || this.toggleSearch}
                 />
               )}
-            </div>
           </div>
-        </header>
+        </div>
         <FadeInDown in={search && searchOpen} duration={300}>
           <Search
             location={location}
             getUserLocation={getUserLocation}
-            searchOpenOnLoad={searchOpenOnLoad}
+            canToggle={canToggle}
           />
         </FadeInDown>
-      </div>
+      </header>
     );
   }
 }

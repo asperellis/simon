@@ -7,6 +7,7 @@ import ExpandDown from './../Animations/ExpandDown';
 import API from './../../api/api';
 import { Link } from 'react-router-dom';
 import { debounce } from './../../utils/utils';
+import { withRouter } from 'react-router-dom';
 
 const HeaderSearchButton = ({ onClick, ...attributes }) => {
   return (
@@ -26,52 +27,63 @@ const HeaderSearchButton = ({ onClick, ...attributes }) => {
   );
 };
 
-const HeaderSearchForm = ({
-  performSearch,
-  updateQuery,
-  query,
-  handleKeyDown,
-  toggleSuggestions,
-  autoFocus,
-  ...attributes
-}) => {
-  return (
-    <form
-      role="search"
-      onSubmit={performSearch}
-      className={styles.headerSearchForm}
-      {...attributes}
-    >
-      <HeaderSearchButton
-        onClick={performSearch}
-        type="submit"
-        aria-label="Search"
-      />
-      {!query && (
-        <label htmlFor="headerSearchInput" className={styles.headerSearchLabel}>
-          {'Search by center, store or location'}
-        </label>
-      )}
-      <input
-        type="search"
-        autoFocus={autoFocus}
-        className={styles.headerSearchInput}
-        name="headerSearchInput"
-        id="headerSearchInput"
-        onKeyDown={handleKeyDown}
-        onFocus={() => {
-          toggleSuggestions(true);
-        }}
-        onBlur={() => {
-          toggleSuggestions(query.length > 0);
-        }}
-        onChange={updateQuery}
-        aria-label="Search by center, store or location"
-        autoComplete="off"
-      />
-    </form>
-  );
-};
+class HeaderSearchForm extends Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    const {
+      performSearch,
+      updateQuery,
+      query,
+      handleKeyDown,
+      showSuggestions,
+      autoFocus,
+      inputRef,
+      ...attributes
+    } = this.props;
+    return (
+      <form
+        role="search"
+        onSubmit={performSearch}
+        className={styles.headerSearchForm}
+        {...attributes}
+      >
+        <HeaderSearchButton
+          onClick={performSearch}
+          type="submit"
+          aria-label="Search"
+        />
+        {!query && (
+          <label
+            htmlFor="headerSearchInput"
+            className={styles.headerSearchLabel}
+          >
+            {'Search by center, store or location'}
+          </label>
+        )}
+        <input
+          type="search"
+          autoFocus={autoFocus}
+          className={styles.headerSearchInput}
+          name="headerSearchInput"
+          id="headerSearchInput"
+          ref={inputRef}
+          onKeyDown={handleKeyDown}
+          onFocus={() => {
+            showSuggestions(true);
+          }}
+          onBlur={() => {
+            showSuggestions(query.length > 0);
+          }}
+          onChange={updateQuery}
+          aria-label="Search by center, store or location"
+          autoComplete="off"
+        />
+      </form>
+    );
+  }
+}
 
 const HeaderSearchSuggestions = ({
   suggestions,
@@ -177,9 +189,10 @@ class Search extends Component {
       cursor: 0
     };
 
+    this.searchInput = React.createRef();
     this.updateQuery = this.updateQuery.bind(this);
     this.performSearch = this.performSearch.bind(this);
-    this.toggleSuggestions = this.toggleSuggestions.bind(this);
+    this.showSuggestions = this.showSuggestions.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
   }
 
@@ -189,8 +202,8 @@ class Search extends Component {
   }
 
   // takes a boolean to show suggestions or not for search
-  toggleSuggestions(showSuggestions) {
-    this.setState({ showSuggestions });
+  showSuggestions(show) {
+    this.setState({ showSuggestions: show });
   }
 
   // updates the query based on inputs value
@@ -258,10 +271,16 @@ class Search extends Component {
     if (event) {
       event.preventDefault();
     }
-    // can we use the router for this redir?
-    document.location.href = `/search/${encodeURIComponent(
-      query.toLowerCase() || this.state.query.toLowerCase()
-    )}`;
+    if (query) {
+      this.searchInput.current.value = query;
+    }
+    this.searchInput.current.blur();
+    this.showSuggestions(false);
+    this.props.history.push(
+      `/search/${encodeURIComponent(
+        query.toLowerCase() || this.state.query.toLowerCase()
+      )}`
+    );
   }
 
   render() {
@@ -281,10 +300,11 @@ class Search extends Component {
               <HeaderSearchForm
                 performSearch={this.performSearch}
                 updateQuery={this.updateQuery}
-                toggleSuggestions={this.toggleSuggestions}
+                showSuggestions={this.showSuggestions}
                 handleKeyDown={this.handleKeyDown}
                 query={this.state.query}
-                autoFocus={!this.props.searchOpenOnLoad}
+                autoFocus={this.props.canToggle}
+                inputRef={this.searchInput}
               />
             </FadeInRight>
             <button
@@ -316,4 +336,4 @@ class Search extends Component {
   }
 }
 
-export default Search;
+export default withRouter(Search);

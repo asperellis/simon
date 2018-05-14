@@ -112,14 +112,14 @@ const FooterLinks = () => {
   );
 };
 
-const Footer = () => {
+const Footer = props => {
   return (
     <footer className={styles.footer}>
       <a
-        href={'https://www.simon.com/mall-insider'}
+        href={props.banner.href}
         className={[styles.footerBannerLink, 'bold'].join(' ')}
       >
-        {'BECOME A MALL INSIDER. JOIN TODAY'}
+        {props.banner.text}
       </a>
       <div className="container">
         <FooterSocialAndSearch />

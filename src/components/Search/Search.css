@@ -8,8 +8,7 @@
   color: #fff;
   font-size: 1.10833rem;
   height: 74px;
-  top: 74px;
-  z-index: 1;
+  z-index: 0;
 }
 
 .headerSearchSuggestions:not(.show) > * {

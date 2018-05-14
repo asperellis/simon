@@ -1,11 +1,26 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { logInUser, logOutUser } from './../actions/App';
 
-const Home = () => {
+const mapStateToProps = state => {
+  return {
+    user: state.user
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    logInUser: () => dispatch(logInUser()),
+    logOutUser: () => dispatch(logOutUser())
+  };
+};
+
+const Home = props => {
   return (
-    <div>
+    <div className="container">
       <h1>Home Page</h1>
       <div>
-        <h2>Image for testing</h2>
+        {/* <h2>Image for testing</h2>
         <picture style={{ display: 'block' }}>
           <source
             srcSet="https://cdn-us-cf2.yottaa.net/555a305b2bb0ac71b9002d22/8da650303f06013513b1026173a6dedd.yottaa.net/v~22.e5.0.0/Simon%20Website/ABOUT/845/2000x400.jpg?yocs=q_&amp;yoloc=us"
@@ -32,11 +47,19 @@ const Home = () => {
             alt="King of Prussia®"
             className="img-full"
           />
-        </picture>
+        </picture> */}
       </div>
-      <button type="button">Button for Tab Testing</button>
+      {props.user.status === 'LOGGED_OUT' ? (
+        <button type="button" onClick={props.logInUser}>
+          FAKE LOGIN
+        </button>
+      ) : (
+        <button type="button" onClick={props.logOutUser}>
+          FAKE LOGOUT
+        </button>
+      )}
     </div>
   );
 };
 
-export default Home;
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

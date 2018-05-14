@@ -1,0 +1,17 @@
+.mainContentPad1,
+.mainContentPad2,
+.mainContentPad3 {
+  min-height: 100vh;
+}
+
+.mainContentPad1 {
+  margin-top: 74px;
+}
+
+.mainContentPad2 {
+  margin-top: calc(74px * 2);
+}
+
+.mainContentPad3 {
+  margin-top: calc(74px * 3);
+}
