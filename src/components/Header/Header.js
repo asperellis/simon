@@ -1,12 +1,104 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { ask } from 'what-input';
+import Dropdown from './../../components/Dropdowns/Dropdown';
 import Search from './../../components/Search/Search';
 import FadeInDown from './../Animations/FadeInDown';
 import styles from './Header.css';
 import SearchIcon from './../../images/icons/search.svg';
 import CloseIcon from './../../images/icons/close.svg';
-import AdminLogo from './../../images/logos/premium-outlets.svg';
+import AdminLogo from './../../images/logos/simon-central.svg';
+
+const HeaderNavVipDropdown = props => {
+  return (
+    <Dropdown
+      text={'VIP CLUB'}
+      buttonClassName={[styles.headerNavLink, 'bold'].join(' ')}
+      dropOnHover={true}
+      direction={'right'}
+    >
+      {props.userLoggedIn ? (
+        <div>LOGGED IN!</div>
+      ) : (
+        <div className="dropdown-menu">
+          <div>VIP CLUB</div>
+          <p>
+            Join the VIP Shoppers Club for free access to exclusive VIP offers
+            online.
+          </p>
+          <div>
+            <a
+              href="https://www.premiumoutlets.com/vip/register"
+              className="btn btn-primary"
+            >
+              JOIN THE VIP SHOPPER CLUB
+            </a>
+          </div>
+          <div>ALREADY A MEMBER?</div>
+          <div className="dropdown-item">
+            <form className="form-with-header js-floating-labels">
+              <div className="form-group">
+                <label htmlFor="email" className="floating">
+                  EMAIL ADDRESS
+                </label>
+                <input
+                  type="email"
+                  className="form-control"
+                  placeholder="EMAIL ADDRESS"
+                  id="email"
+                  name="email"
+                  autoComplete="off"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="password" className="floating">
+                  PASSWORD
+                </label>
+                <input
+                  type="password"
+                  className="form-control"
+                  placeholder="PASSWORD"
+                  id="password"
+                  name="password"
+                  maxLength="15"
+                  autoComplete="off"
+                />
+              </div>
+              <div className="form-group clearfix">
+                <div className="checkbox pull-xs-left">
+                  <label htmlFor="stay-logged-in">
+                    <input
+                      type="checkbox"
+                      id="stay-logged-in"
+                      name="stayloggedin"
+                      value="false"
+                      data-parsley-multiple="stayloggedin"
+                    />
+                    <span className="c-indicator" />
+                    Stay Logged In
+                  </label>
+                </div>
+                <a
+                  className="pull-xs-right forgot-password"
+                  href="https://www.premiumoutlets.com/vip/forgot-password"
+                >
+                  <small>Forgot Password?</small>
+                </a>
+              </div>
+              <input
+                type="submit"
+                id="submit"
+                name="submit"
+                value="LOGIN"
+                className="btn btn-primary"
+              />
+            </form>
+          </div>
+        </div>
+      )}
+    </Dropdown>
+  );
+};
 
 const HeaderNavButton = ({ onClick, navOpen, ...attributes }) => {
   const classNames = [styles.headerNavBtn, navOpen ? styles.open : ''].join(
@@ -29,10 +121,8 @@ const HeaderLogo = props => {
   return (
     <Link to="/" aria-label="Simon homepage" className={styles.headerLogo}>
       <Logo
-        width={90.5}
-        height={35.6}
+        height={props.height || 35.6}
         fill={props.fill || '#fff'}
-        viewBox={'0 0 90.5 35.6'}
         className={styles.headerLogoSvg}
       />
     </Link>
@@ -66,6 +156,7 @@ const HeaderNav = props => {
           {link.text}
         </a>
       ))}
+      <HeaderNavVipDropdown userLoggedIn={props.userLoggedIn} />
     </nav>
   );
 };

@@ -11,6 +11,11 @@ const ExpandDown = ({ children, duration, delay = 0, in: inProp }) => {
     transformOrigin: 'center top'
   };
 
+  const defaultChildStyle = {
+    opacity: 0,
+    transition: `opacity ${duration}ms ease ${duration}`
+  };
+
   // Styles that will be applied to children as the status
   // of the transition changes. Each key of the
   // 'transitionStyles' object matches the name of a
@@ -34,6 +39,23 @@ const ExpandDown = ({ children, duration, delay = 0, in: inProp }) => {
     }
   };
 
+  const childTransitionStyles = {
+    // Start with component invisible and shifted up by 10%
+    entering: {
+      opacity: 0
+    },
+    // Transition to component being visible and having its position reset.
+    entered: {
+      opacity: 1,
+      transition: `opacity ${duration}ms ease ${duration}ms`
+    },
+    // Fade element out and slide it back up on exit.
+    exiting: {
+      opacity: 0,
+      transition: `opacity ${duration / 2}ms ease 0ms`
+    }
+  };
+
   return (
     <Transition
       in={inProp}
@@ -41,7 +63,6 @@ const ExpandDown = ({ children, duration, delay = 0, in: inProp }) => {
         enter: 0,
         exit: duration
       }}
-      unmountOnExit
     >
       {status => {
         // Don't render anything if component has 'exited'.
@@ -52,9 +73,19 @@ const ExpandDown = ({ children, duration, delay = 0, in: inProp }) => {
         // Apply different styles to children based
         // on the current value of 'status'.
         const currentStyles = transitionStyles[status];
+        const currentChildrenStyles = childTransitionStyles[status];
+        let styledChildren;
+
+        if (children.props.children) {
+          styledChildren = React.cloneElement(children.props.children, {
+            style: Object.assign({}, defaultChildStyle, currentChildrenStyles)
+          });
+        }
+
         return React.cloneElement(children, {
-          transitionStatus: status,
-          style: Object.assign({}, defaultStyle, currentStyles)
+          status,
+          style: Object.assign({}, defaultStyle, currentStyles),
+          children: styledChildren || undefined
         });
       }}
     </Transition>

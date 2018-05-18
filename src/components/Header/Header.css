@@ -37,6 +37,7 @@
   margin: 0 auto;
   display: block;
   flex: 1;
+  max-width: 150px;
 }
 
 .headerNav {
@@ -189,10 +190,18 @@
   width: auto;
 }
 
+@media (--sm-viewport-up) {
+  .headerLogo,
+  .headerLogoSvg {
+    max-width: 300px;
+  }
+}
+
 @media (--lg-viewport-up) {
   .headerLogo {
     flex: 0;
   }
+
   .headerNavBtn {
     display: none;
   }
@@ -201,7 +210,7 @@
     flex: 1;
     align-items: center;
     justify-content: flex-end;
-    overflow: auto;
+    overflow: visible;
     position: initial;
     height: auto;
     max-width: none;
@@ -218,7 +227,7 @@
     padding: calc((74px - 16px) / 2) 0;
     font-size: 0.6414rem;
   }
-  .headerNavLink + .headerNavLink {
+  .headerNav > .headerNavLink + * {
     margin-left: 1.9152rem;
   }
 }

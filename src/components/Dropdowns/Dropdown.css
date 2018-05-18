@@ -1,0 +1,22 @@
+.dropdown,
+.dropdownToggle {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdownContent {
+  background-color: #fff;
+  position: absolute;
+  padding: 15px;
+  width: 300px;
+  backface-visibility: hidden;
+  border: 1px solid #b4b2b0;
+}
+
+.dropdownContent.right {
+  right: 0;
+}
+
+.dropdownContnet.left {
+  left: 0;
+}

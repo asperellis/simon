@@ -4,6 +4,7 @@ import Header from './../components/Header/Header';
 import Footer from './../components/Footer/Footer';
 import SimonLogo from './../images/logos/simon.svg';
 import PremiumOutletsLogo from './../images/logos/premium-outlets.svg';
+import GiftcardLogo from './../images/logos/giftcard.svg';
 import CookieMessage from './../components/CookieMessage/CookieMessage';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -24,8 +25,17 @@ const THEMES = {
     logo: PremiumOutletsLogo,
     footer: {
       banner: {
-        text: 'JOIN THE VIP CLUB TODAY.',
+        text: 'JOIN THE VIP CLUB TODAY',
         href: 'https://www.premiumoutlets.com/vip/register'
+      }
+    }
+  },
+  giftcard: {
+    logo: GiftcardLogo,
+    footer: {
+      banner: {
+        text: 'CHECK YOUR CARD BALANCE',
+        href: 'https://www.simon.com/giftcard/card_balance.aspx'
       }
     }
   }
@@ -48,13 +58,7 @@ class DefaultLayout extends Component {
     const theme = THEMES[this.props.theme];
     const searchCanToggle = true;
     const user = this.props.user;
-    let mainContentPad = 1;
-    if (user.status === 'LOGGED_IN') {
-      mainContentPad++;
-    }
-    if (!searchCanToggle) {
-      mainContentPad++;
-    }
+    const contentPad = 1 + (user.status === 'LOGGED_IN') + !searchCanToggle;
 
     return (
       <div>
@@ -71,7 +75,7 @@ class DefaultLayout extends Component {
             />
             {!docCookies.getItem('seen_cookie_message') && <CookieMessage />}
             <main
-              className={styles[`mainContentPad${mainContentPad}`]}
+              className={styles[`contentPad${contentPad}`]}
               id="site-content"
               tabIndex="-1"
             >

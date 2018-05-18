@@ -87,7 +87,7 @@ class HeaderSearchForm extends Component {
 
 const HeaderSearchSuggestions = ({
   suggestions,
-  transitionStatus,
+  status,
   cursor,
   ...attributes
 }) => {
@@ -119,28 +119,11 @@ const HeaderSearchSuggestions = ({
   ];
   const links = suggestions || quickLinks;
 
-  const getSearchUrl = type => {
-    let url = '';
-
-    switch (type.toLowerCase()) {
-      // case 'mall':
-      //   url = '/mall/mall-short-name';
-      //   break;
-      // case 'tenant':
-      //   url = '/brand/base-tenant-short-name';
-      //   break;
-      default:
-        url = '/search/';
-        break;
-    }
-
-    return url;
-  };
   return (
     <div
       className={[
         styles.headerSearchSuggestions,
-        transitionStatus === 'entered' && styles.show
+        status === 'entered' && styles.show
       ].join(' ')}
       {...attributes}
     >
@@ -158,7 +141,7 @@ const HeaderSearchSuggestions = ({
           >
             {links.map((item, id) => (
               <Link
-                to={item.href || getSearchUrl(item.type)}
+                to={item.href}
                 className={[
                   suggestions
                     ? styles.headerSearchSuggestionsLink
@@ -236,7 +219,7 @@ class Search extends Component {
         case 'Enter':
           if (cursor > 0) {
             event.preventDefault();
-            this.performSearch(null, querySuggestions[cursor - 1].text);
+            this.props.history.push(querySuggestions[cursor - 1].href);
           }
           break;
         default:
