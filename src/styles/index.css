@@ -98,3 +98,7 @@ input:hover,
 input:active {
   outline: none;
 }
+
+a {
+  color: #000;
+}

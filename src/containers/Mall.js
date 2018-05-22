@@ -1,18 +1,35 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { setSearchToggle } from './../actions/App';
 
-const Mall = props => {
-  const mall = props.match.params.mallShortName;
-  return (
-    <div>
-      {mall && (
-        <div>
-          <div>WEATHER COMP</div>
-          <nav>Mall Nav</nav>
-        </div>
-      )}
-      <h1>{mall ? 'Mall Page for ' + mall : 'Show all the malls'}</h1>
-    </div>
-  );
+const mapDispatchToProps = dispatch => {
+  return {
+    setSearchToggle: canToggle => dispatch(setSearchToggle(canToggle))
+  };
 };
 
-export default Mall;
+class Mall extends Component {
+  componentDidMount() {
+    this.props.setSearchToggle(true);
+  }
+
+  render() {
+    const mall = this.props.match.params.mallShortName;
+    return (
+      <div className="container">
+        {mall && (
+          <div>
+            <div>Weather and Mall nav would be here</div>
+            <h1>{mall ? 'Mall Page for ' + mall : 'Show all the malls'}</h1>
+            <p>
+              This is an example of a page with a search closed by default.
+              Allowing the user to toggle open the search as needed.
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+}
+
+export default connect(null, mapDispatchToProps)(Mall);

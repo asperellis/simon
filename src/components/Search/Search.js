@@ -6,6 +6,7 @@ import FadeInRight from './../Animations/FadeInRight';
 import ExpandDown from './../Animations/ExpandDown';
 import API from './../../api/api';
 import { Link } from 'react-router-dom';
+import { ask } from 'what-input';
 import { debounce } from './../../utils/utils';
 import { withRouter } from 'react-router-dom';
 
@@ -89,34 +90,9 @@ const HeaderSearchSuggestions = ({
   suggestions,
   status,
   cursor,
+  quickLinks,
   ...attributes
 }) => {
-  const quickLinks = [
-    {
-      href: 'https://www.simon.com/mall',
-      text: 'See All Properties'
-    },
-    {
-      href: 'https://www.simon.com/mall-insider',
-      text: 'Mall Insider'
-    },
-    {
-      href: 'https://www.premiumoutlets.com/vip',
-      text: 'VIP Club'
-    },
-    {
-      href: 'http://www.simon.com/brands',
-      text: 'Brands'
-    },
-    {
-      href: 'https://www.simon.com/giftcard',
-      text: 'Simon Giftcard®'
-    },
-    {
-      href: 'https://www.simon.com/travel',
-      text: 'Travel & Tourism'
-    }
-  ];
   const links = suggestions || quickLinks;
 
   return (
@@ -220,6 +196,13 @@ class Search extends Component {
           if (cursor > 0) {
             event.preventDefault();
             this.props.history.push(querySuggestions[cursor - 1].href);
+            this.searchInput.current.blur();
+            this.showSuggestions(false);
+            this.props.toggleSearch();
+            window.scrollTo({
+              top: 0,
+              behavior: 'smooth'
+            });
           }
           break;
         default:
@@ -264,6 +247,10 @@ class Search extends Component {
         query.toLowerCase() || this.state.query.toLowerCase()
       )}`
     );
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
   }
 
   render() {
@@ -286,30 +273,33 @@ class Search extends Component {
                 showSuggestions={this.showSuggestions}
                 handleKeyDown={this.handleKeyDown}
                 query={this.state.query}
-                autoFocus={this.props.canToggle}
+                autoFocus={this.props.canToggle && ask() === 'mouse'}
                 inputRef={this.searchInput}
               />
             </FadeInRight>
-            <button
-              type="button"
-              onClick={this.props.getUserLocation}
-              className={[styles.headerSearchFindNearbyButton, 'light'].join(
-                ' '
-              )}
-            >
-              <NavIcon
-                width={20}
-                height={20}
-                fill={'#b4b2b0'}
-                viewBox={'0 0 20 20'}
-                className={styles.headerSearchFindNearbyIcon}
-              />
-              <span>Find Nearby Centers</span>
-            </button>
+            {this.props.allowLocation && (
+              <button
+                type="button"
+                onClick={this.props.getUserLocation}
+                className={[styles.headerSearchFindNearbyButton, 'light'].join(
+                  ' '
+                )}
+              >
+                <NavIcon
+                  width={20}
+                  height={20}
+                  fill={'#b4b2b0'}
+                  viewBox={'0 0 20 20'}
+                  className={styles.headerSearchFindNearbyIcon}
+                />
+                <span>Find Nearby Centers</span>
+              </button>
+            )}
           </div>
         </div>
         <ExpandDown in={this.state.showSuggestions} duration={300} delay={0}>
           <HeaderSearchSuggestions
+            quickLinks={this.props.quickLinks}
             suggestions={this.state.querySuggestions}
             cursor={this.state.cursor}
           />

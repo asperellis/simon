@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styles from './Footer.css';
 import SearchIcon from './../../images/icons/search.svg';
 import SocialIcons from './../SocialIcons/SocialIcons';
@@ -15,8 +16,8 @@ const FooterSocialAndSearch = () => {
         simon={'https://www.simon.com'}
         instagram={'https://www.instagram.com'}
       />
-      <a
-        href="https://www.simon.com/search"
+      <Link
+        to={'/search'}
         className={[styles.footerSearchLink, 'bold'].join(' ')}
       >
         <SearchIcon
@@ -27,69 +28,15 @@ const FooterSocialAndSearch = () => {
           className={styles.footerSearchIcon}
         />
         FIND ANOTHER SIMON CENTER
-      </a>
+      </Link>
     </div>
   );
 };
 
-const FooterLinks = () => {
-  const linkGroups = [
-    {
-      name: 'Learn More',
-      links: [
-        { href: 'http://business.simon.com/about', text: 'About Simon' },
-        { href: 'http://www.simon.com/mall', text: 'See All Properties' },
-        { href: 'https://www.simon.com/travel', text: 'Travel & Tourism' },
-        { href: 'http://www.simon.com/brands', text: 'Brands' }
-      ]
-    },
-    {
-      name: 'More From Simon',
-      links: [
-        { href: 'http://www.simon.com/foundatsimon', text: '#foundatsimon' },
-        { href: 'https://said.simon.com/', text: 'Simon SAID' },
-        { href: 'https://family.simon.com/', text: 'Family at Simon' },
-        { href: 'http://syf.org/', text: 'Simon Youth Foundation' }
-      ]
-    },
-    {
-      name: 'Simon Giftcards®',
-      links: [
-        {
-          href: 'https://www.simon.com/giftcard/',
-          text: 'Purchase a Giftcard'
-        },
-        {
-          href: 'https://www.simon.com/giftcard/account_register.aspx',
-          text: 'Register Your Card'
-        },
-        {
-          href: 'https://www.simon.com/giftcard/card_balance.aspx',
-          text: 'Check Your Balance'
-        },
-        { href: 'https://www.simon.com/volume/', text: 'Corporate Sales' }
-      ]
-    },
-    {
-      name: 'Business Opportunities',
-      links: [
-        { href: 'http://business.simon.com/advertising', text: 'Advertising' },
-        { href: 'https://business.simon.com/leasing', text: 'Leasing' },
-        {
-          href: 'http://business.simon.com/property-services',
-          text: 'Property Services'
-        },
-        {
-          href: 'http://business.simon.com/retailer-marketing',
-          text: 'Retailer Marketing'
-        }
-      ]
-    }
-  ];
-
+const FooterLinks = ({ links }) => {
   return (
     <div className={styles.footerLinks}>
-      {linkGroups.map(group => (
+      {links.map(group => (
         <div className={styles.footerLinksColumn} key={group.name}>
           <div className={[styles.footerLinkHeader, 'bold'].join(' ')}>
             {group.name}
@@ -112,23 +59,38 @@ const FooterLinks = () => {
   );
 };
 
-const Footer = props => {
+const FooterLegal = () => {
+  return (
+    <div className={styles.footerLegal}>
+      {'COPYRIGHT© 1999-2018, SIMON PROPERTY GROUP, L.P. ALL RIGHTS RESERVED.'}
+      <br />
+      {'By using this site, you agree to abide by its '}
+      <a href="http://www.simon.com/legal">Terms of Use</a>
+      {
+        ', which prohibit commercial use of any information on this site. View our '
+      }
+      <a href="http://www.simon.com/legal/privacy">Privacy Policy</a>
+      {' / '}
+      <a href="http://www.simon.com/legal/california-privacy">
+        Your California Privacy Rights
+      </a>.
+    </div>
+  );
+};
+
+const Footer = ({ banner, links }) => {
   return (
     <footer className={styles.footer}>
       <a
-        href={props.banner.href}
+        href={banner.href}
         className={[styles.footerBannerLink, 'bold'].join(' ')}
       >
-        {props.banner.text}
+        {banner.text}
       </a>
       <div className="container">
         <FooterSocialAndSearch />
-        <FooterLinks />
-        <div className={styles.footerLegal}>
-          {
-            'COPYRIGHT© 1999-2018, SIMON PROPERTY GROUP, L.P. ALL RIGHTS RESERVED.\nBy using this site, you agree to abide by its Terms of Use, which prohibit commercial use of any information on this site. View our Privacy Policy / Your California Privacy Rights\nSimon values your privacy, manage your Ad Choices'
-          }
-        </div>
+        <FooterLinks links={links} />
+        <FooterLegal />
       </div>
     </footer>
   );

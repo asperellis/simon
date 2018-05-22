@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { ask } from 'what-input';
+import { connect } from 'react-redux';
+import { getUserLocation } from './../../actions/App';
 import Dropdown from './../../components/Dropdowns/Dropdown';
 import Search from './../../components/Search/Search';
 import FadeInDown from './../Animations/FadeInDown';
@@ -9,7 +11,20 @@ import SearchIcon from './../../images/icons/search.svg';
 import CloseIcon from './../../images/icons/close.svg';
 import AdminLogo from './../../images/logos/simon-central.svg';
 
-const HeaderNavVipDropdown = props => {
+const mapStateToProps = state => {
+  return {
+    user: state.user,
+    search: state.search
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getUserLocation: () => dispatch(getUserLocation())
+  };
+};
+
+export const HeaderNavVipDropdown = props => {
   return (
     <Dropdown
       text={'VIP CLUB'}
@@ -130,15 +145,6 @@ const HeaderLogo = props => {
 };
 
 const HeaderNav = props => {
-  // links in the header - default
-  const navLinks = props.links || [
-    { text: 'SHOPPERS', href: 'https://www.simon.com' },
-    { text: 'BUSINESS', href: 'https://www.simon.com' },
-    { text: 'INVESTORS', href: 'https://www.simon.com' },
-    { text: 'CAREERS', href: 'https://www.simon.com' },
-    { text: 'CONTACT', href: 'https://www.simon.com' }
-  ];
-
   const navClasses = [
     styles.headerNav,
     props.navOpen ? styles.open : '',
@@ -147,16 +153,21 @@ const HeaderNav = props => {
 
   return (
     <nav className={navClasses}>
-      {navLinks.map(link => (
-        <a
-          href={link.href}
-          className={[styles.headerNavLink, 'bold'].join(' ')}
-          key={link.text}
-        >
-          {link.text}
-        </a>
-      ))}
-      <HeaderNavVipDropdown userLoggedIn={props.userLoggedIn} />
+      {props.links.map((link, index) => {
+        if (link.href) {
+          return (
+            <a
+              href={link.href}
+              className={[styles.headerNavLink, 'bold'].join(' ')}
+              key={link.text + index}
+            >
+              {link.text}
+            </a>
+          );
+        }
+        const DropdownLink = link;
+        return <DropdownLink key={index} />;
+      })}
     </nav>
   );
 };
@@ -205,12 +216,19 @@ class Header extends Component {
     super(props);
 
     this.state = {
-      searchOpen: !this.props.canToggle || false,
+      searchOpen: !this.props.search.toggle || false,
       navOpen: false
     };
 
     this.toggleSearch = this.toggleSearch.bind(this);
     this.toggleNav = this.toggleNav.bind(this);
+  }
+
+  static getDerivedStateFromProps(nextProps) {
+    if (nextProps.search.toggle) {
+      return null;
+    }
+    return { searchOpen: !nextProps.search.toggle };
   }
 
   toggleSearch() {
@@ -235,20 +253,14 @@ class Header extends Component {
 
   render() {
     const { navOpen, searchOpen } = this.state;
-    const {
-      search,
-      location,
-      getUserLocation,
-      canToggle,
-      userLoggedIn
-    } = this.props;
-
+    const { search, user } = this.props;
+    const adminLoggedIn = user.status === 'LOGGED_IN';
     return (
       <header className={styles.header}>
         <a href="#site-content" className={styles.headerSkipToContent}>
           Skip To Content
         </a>
-        {userLoggedIn && <AdminHeader />}
+        {adminLoggedIn && <AdminHeader />}
         <div className="container">
           <div className={styles.headerContent}>
             <HeaderNavButton
@@ -261,22 +273,24 @@ class Header extends Component {
               navOpen={navOpen}
             />
             <HeaderLogo Logo={this.props.Logo} />
-            <HeaderNav navOpen={navOpen} userLoggedIn={userLoggedIn} />
-            {search &&
-              canToggle && (
+            <HeaderNav links={this.props.links} navOpen={navOpen} />
+            {search.include &&
+              search.toggle && (
                 <HeaderSearchButton
                   onClick={this.toggleSearch}
                   searchOpen={searchOpen}
-                  onFocus={!canToggle || this.toggleSearch}
+                  onFocus={searchOpen ? undefined : this.toggleSearch}
                 />
               )}
           </div>
         </div>
-        <FadeInDown in={search && searchOpen} duration={300}>
+        <FadeInDown in={search.include && searchOpen} duration={300}>
           <Search
-            location={location}
-            getUserLocation={getUserLocation}
-            canToggle={canToggle}
+            allowLocation={user.location}
+            getUserLocation={this.props.getUserLocation}
+            canToggle={search.toggle}
+            quickLinks={this.props.quickLinks}
+            toggleSearch={this.toggleSearch}
           />
         </FadeInDown>
       </header>
@@ -284,4 +298,4 @@ class Header extends Component {
   }
 }
 
-export default Header;
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

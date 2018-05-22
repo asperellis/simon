@@ -10,7 +10,7 @@ import ErrorPage from './../containers/Error';
 const AppRouter = () => {
   return (
     <Router>
-      <Layout theme={'simon'}>
+      <Layout>
         <Switch>
           <Route exact path="/" component={Home} />
           <Route path="/search/:query?" component={Search} />

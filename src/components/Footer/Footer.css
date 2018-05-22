@@ -81,6 +81,10 @@
   margin-top: 3.30947rem;
 }
 
+.footerLegal a {
+  text-decoration: underline;
+}
+
 @media (--md-viewport-up) {
   .footerLinks {
     justify-content: space-between;

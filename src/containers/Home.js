@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { logInUser, logOutUser } from './../actions/App';
+import { logInUser, logOutUser, setSearchToggle } from './../actions/App';
 
 const mapStateToProps = state => {
   return {
@@ -11,55 +11,37 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     logInUser: () => dispatch(logInUser()),
-    logOutUser: () => dispatch(logOutUser())
+    logOutUser: () => dispatch(logOutUser()),
+    setSearchToggle: canToggle => dispatch(setSearchToggle(canToggle))
   };
 };
 
-const Home = props => {
-  return (
-    <div className="container">
-      <h1>Home Page</h1>
-      <div>
-        {/* <h2>Image for testing</h2>
-        <picture style={{ display: 'block' }}>
-          <source
-            srcSet="https://cdn-us-cf2.yottaa.net/555a305b2bb0ac71b9002d22/8da650303f06013513b1026173a6dedd.yottaa.net/v~22.e5.0.0/Simon%20Website/ABOUT/845/2000x400.jpg?yocs=q_&amp;yoloc=us"
-            media="(min-width: 2000px)"
-          />
-          <source
-            srcSet="https://cdn-us-cf2.yottaa.net/555a305b2bb0ac71b9002d22/8da650303f06013513b1026173a6dedd.yottaa.net/v~22.e5.0.0/Simon%20Website/ABOUT/845/1200x400.jpg?yocs=q_&amp;yoloc=us"
-            media="(min-width: 1200px)"
-          />
-          <source
-            srcSet="https://cdn-us-cf2.yottaa.net/555a305b2bb0ac71b9002d22/8da650303f06013513b1026173a6dedd.yottaa.net/v~22.e5.0.0/Simon%20Website/ABOUT/845/1024x400.jpg?yocs=q_&amp;yoloc=us"
-            media="(min-width: 1024px)"
-          />
-          <source
-            srcSet="https://cdn-us-cf2.yottaa.net/555a305b2bb0ac71b9002d22/8da650303f06013513b1026173a6dedd.yottaa.net/v~22.e5.0.0/Simon%20Website/ABOUT/845/992x400.jpg?yocs=q_&amp;yoloc=us"
-            media="(min-width: 992px)"
-          />
-          <source
-            srcSet="https://cdn-us-cf2.yottaa.net/555a305b2bb0ac71b9002d22/8da650303f06013513b1026173a6dedd.yottaa.net/v~22.e5.0.0/Simon%20Website/ABOUT/845/768x300.jpg?yocs=q_&amp;yoloc=us"
-            media="(min-width: 768px)"
-          />
-          <img
-            src="https://cdn-us-cf2.yottaa.net/555a305b2bb0ac71b9002d22/8da650303f06013513b1026173a6dedd.yottaa.net/v~22.e5.0.0/Simon%20Website/ABOUT/845/320x300.jpg?yocs=q_&amp;yoloc=us"
-            alt="King of Prussia®"
-            className="img-full"
-          />
-        </picture> */}
+class Home extends Component {
+  componentDidMount() {
+    this.props.setSearchToggle(false);
+  }
+
+  render() {
+    return (
+      <div className="container">
+        <h1>Home Page</h1>
+        <p>
+          This is an example of a page with a search open by default. Toggling
+          removed to disallow the bar to be closed and prevent awkward white
+          space where it used to be or moving content up
+        </p>
+        {this.props.user.status === 'LOGGED_OUT' ? (
+          <button type="button" onClick={this.props.logInUser}>
+            FAKE LOGIN
+          </button>
+        ) : (
+          <button type="button" onClick={this.props.logOutUser}>
+            FAKE LOGOUT
+          </button>
+        )}
       </div>
-      {props.user.status === 'LOGGED_OUT' ? (
-        <button type="button" onClick={props.logInUser}>
-          FAKE LOGIN
-        </button>
-      ) : (
-        <button type="button" onClick={props.logOutUser}>
-          FAKE LOGOUT
-        </button>
-      )}
-    </div>
-  );
-};
+    );
+  }
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
