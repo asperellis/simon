@@ -148,8 +148,14 @@ const HeaderNav = props => {
   const navClasses = [
     styles.headerNav,
     props.navOpen ? styles.open : '',
-    props.userLoggedIn ? styles.navAdminPad : ''
+    props.adminLoggedIn ? styles.navAdminPad : ''
   ].join(' ');
+  const isLastLink = i => i === props.links.length - 1;
+  const toggleNavOnKey = e => {
+    if (e.key === 'Tab' && !e.shiftKey) {
+      props.toggleNav();
+    }
+  };
 
   return (
     <nav className={navClasses}>
@@ -160,13 +166,25 @@ const HeaderNav = props => {
               href={link.href}
               className={[styles.headerNavLink, 'bold'].join(' ')}
               key={link.text + index}
+              onFocus={!props.navOpen ? props.toggleNav : undefined}
+              onKeyDown={isLastLink(index) ? toggleNavOnKey : undefined}
             >
               {link.text}
             </a>
           );
         }
         const DropdownLink = link;
-        return <DropdownLink key={index} />;
+        return (
+          <DropdownLink
+            key={index}
+            onBlur={
+              isLastLink(index) && props.navOpen ? toggleNavOnKey : undefined
+            }
+            onFocus={
+              isLastLink(index) && !props.navOpen ? toggleNavOnKey : undefined
+            }
+          />
+        );
       })}
     </nav>
   );
@@ -226,7 +244,7 @@ class Header extends Component {
 
   static getDerivedStateFromProps(nextProps) {
     if (nextProps.search.toggle) {
-      return null;
+      return { searchOpen: false };
     }
     return { searchOpen: !nextProps.search.toggle };
   }
@@ -242,13 +260,19 @@ class Header extends Component {
 
   toggleNav() {
     const htmlTag = document.documentElement;
-    this.setState({ navOpen: !this.state.navOpen, searchOpen: false }, () => {
-      if (this.state.navOpen) {
-        htmlTag.classList.add(styles.headerNavOpen);
-      } else {
-        htmlTag.classList.remove(styles.headerNavOpen);
+    this.setState(
+      {
+        navOpen: !this.state.navOpen,
+        searchOpen: !this.props.search.toggle || false
+      },
+      () => {
+        if (this.state.navOpen) {
+          htmlTag.classList.add(styles.headerNavOpen);
+        } else {
+          htmlTag.classList.remove(styles.headerNavOpen);
+        }
       }
-    });
+    );
   }
 
   render() {
@@ -273,15 +297,20 @@ class Header extends Component {
               navOpen={navOpen}
             />
             <HeaderLogo Logo={this.props.Logo} />
-            <HeaderNav links={this.props.links} navOpen={navOpen} />
-            {search.include &&
-              search.toggle && (
-                <HeaderSearchButton
-                  onClick={this.toggleSearch}
-                  searchOpen={searchOpen}
-                  onFocus={searchOpen ? undefined : this.toggleSearch}
-                />
-              )}
+            <HeaderNav
+              links={this.props.links}
+              navOpen={navOpen}
+              toggleNav={this.toggleNav}
+              adminLoggedIn={adminLoggedIn}
+            />
+            {search.include && (
+              <HeaderSearchButton
+                onClick={this.toggleSearch}
+                searchOpen={searchOpen}
+                onFocus={searchOpen ? undefined : this.toggleSearch}
+                style={search.toggle ? {} : { visibility: 'hidden' }}
+              />
+            )}
           </div>
         </div>
         <FadeInDown in={search.include && searchOpen} duration={300}>
@@ -293,6 +322,15 @@ class Header extends Component {
             toggleSearch={this.toggleSearch}
           />
         </FadeInDown>
+        {navOpen && (
+          <div
+            role={'presentation'}
+            className={styles.headerNavOverlay}
+            onClick={this.toggleNav}
+            onKeyPress={this.toggleNav}
+            tabIndex={-1}
+          />
+        )}
       </header>
     );
   }

@@ -89,6 +89,7 @@ class HeaderSearchForm extends Component {
 const HeaderSearchSuggestions = ({
   suggestions,
   status,
+  showSuggestions,
   cursor,
   quickLinks,
   ...attributes
@@ -125,6 +126,9 @@ const HeaderSearchSuggestions = ({
                   `${cursor === id + 1 && suggestions ? styles.active : ''}`
                 ].join(' ')}
                 key={item.text + id}
+                onClick={() => {
+                  showSuggestions(false);
+                }}
               >
                 {item.text}
               </Link>
@@ -158,6 +162,10 @@ class Search extends Component {
   // for animations
   componentDidMount() {
     this.setState({ mounted: !this.state.mounted });
+  }
+
+  componentWillUnmount() {
+    // TODO stop this.getSearchSuggestions();
   }
 
   // takes a boolean to show suggestions or not for search
@@ -280,7 +288,10 @@ class Search extends Component {
             {this.props.allowLocation && (
               <button
                 type="button"
-                onClick={this.props.getUserLocation}
+                onClick={() => {
+                  this.props.getUserLocation();
+                  this.props.history.push('/search/your-location');
+                }}
                 className={[styles.headerSearchFindNearbyButton, 'light'].join(
                   ' '
                 )}
@@ -302,6 +313,7 @@ class Search extends Component {
             quickLinks={this.props.quickLinks}
             suggestions={this.state.querySuggestions}
             cursor={this.state.cursor}
+            showSuggestions={this.showSuggestions}
           />
         </ExpandDown>
       </div>

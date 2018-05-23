@@ -176,7 +176,8 @@ const THEMES = {
               href: 'http://www.premiumoutlets.com/japanese/',
               text: '日本語'
             }
-          ]
+          ],
+          wrap: true
         }
       ]
     }
@@ -226,7 +227,6 @@ class DefaultLayout extends Component {
     const theme = THEMES[this.state.theme];
     const { user, search } = this.props;
     const contentPad = 1 + (user.status === 'LOGGED_IN') + !search.toggle;
-
     // temp for theme testing
     const tempBtnStyles = {
       backgroundColor: '#000',

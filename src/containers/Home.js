@@ -21,10 +21,23 @@ class Home extends Component {
     this.props.setSearchToggle(false);
   }
 
+  componentWillUnmount() {
+    this.props.setSearchToggle(true);
+  }
+
   render() {
+    const { location } = this.props.user;
     return (
       <div className="container">
         <h1>Home Page</h1>
+        {location &&
+          location.latitude && (
+            <p>
+              User Location:<br />
+              {`Latitude ${location.latitude}, 
+              Longitude ${location.longitude}`}
+            </p>
+          )}
         <p>
           This is an example of a page with a search open by default. Toggling
           removed to disallow the bar to be closed and prevent awkward white

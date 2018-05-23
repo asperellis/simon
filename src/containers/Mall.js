@@ -1,20 +1,8 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { setSearchToggle } from './../actions/App';
-
-const mapDispatchToProps = dispatch => {
-  return {
-    setSearchToggle: canToggle => dispatch(setSearchToggle(canToggle))
-  };
-};
 
 class Mall extends Component {
-  componentDidMount() {
-    this.props.setSearchToggle(true);
-  }
-
   render() {
-    const mall = this.props.match.params.mallShortName;
+    const mall = this.props.match.params.shortName;
     return (
       <div className="container">
         {mall && (
@@ -32,4 +20,4 @@ class Mall extends Component {
   }
 }
 
-export default connect(null, mapDispatchToProps)(Mall);
+export default Mall;

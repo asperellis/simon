@@ -13,14 +13,16 @@ const AppRouter = () => {
       <Layout>
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route path="/search/:query?" component={Search} />
+          <Route exact path="/search" component={Search} />
+          <Route path="/search/:query" component={Search} />
+          <Route path="/brand/:query" component={Search} />
           <Route exact path="/mall" component={Mall} />
           <Route
-            path="/mall/:mallShortName"
+            path="/mall/:shortName"
             exact
             strict
             render={({ match }) => {
-              if (!/^[-a-zA-Z]*$/.test(match.params.mallShortName)) {
+              if (!/^[-a-zA-Z0-9]*$/.test(match.params.shortName)) {
                 return <ErrorPage />;
               }
               return <Mall match={match} />;

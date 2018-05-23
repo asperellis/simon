@@ -11,6 +11,7 @@
 
 .adminHeader {
   background-color: #dcdcdc;
+  z-index: 2000;
 }
 
 .adminHeader .headerContent {
@@ -64,7 +65,7 @@
   transform: translateX(0);
 }
 
-.headerNav.open.navAdminPad {
+.headerNav.navAdminPad {
   top: 148px;
 }
 
@@ -95,6 +96,15 @@
 
 .headerSearchBtn {
   margin-left: 1.9152rem;
+}
+
+.headerNavOverlay {
+  position: fixed;
+  top: 74px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
 }
 
 .headerNavBtn {
@@ -221,6 +231,11 @@
     transform: translateX(0);
     background-color: transparent;
   }
+
+  .headerNavOverlay {
+    display: none;
+  }
+
   .headerNavLink {
     display: inline-block;
     border: none;

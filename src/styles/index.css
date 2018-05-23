@@ -92,6 +92,7 @@ button {
 }
 
 [data-whatintent='mouse'] *:focus,
+[data-whatintent='touch'] *:focus,
 a:hover,
 a:active,
 input:hover,

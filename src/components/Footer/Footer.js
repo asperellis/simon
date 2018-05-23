@@ -41,7 +41,7 @@ const FooterLinks = ({ links }) => {
           <div className={[styles.footerLinkHeader, 'bold'].join(' ')}>
             {group.name}
           </div>
-          <nav>
+          <nav className={group.wrap ? styles.footerLinksWrap : ''}>
             {group.links.map(link => (
               <a
                 className={styles.footerLink}
