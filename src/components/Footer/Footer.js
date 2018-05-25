@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom';
 import styles from './Footer.css';
 import SearchIcon from './../../images/icons/search.svg';
 import SocialIcons from './../SocialIcons/SocialIcons';
+import PropTypes from 'prop-types';
 
+// Horizontal Row of Social Icons for given theme and a Link to the Search Page
 const FooterSocialAndSearch = () => {
   return (
-    <div className={[styles.footerRow].join(' ')}>
+    <div className={styles.footerRow}>
       <SocialIcons
         width={25}
         height={25}
@@ -16,10 +18,7 @@ const FooterSocialAndSearch = () => {
         simon={'https://www.simon.com'}
         instagram={'https://www.instagram.com'}
       />
-      <Link
-        to={'/search'}
-        className={[styles.footerSearchLink, 'bold'].join(' ')}
-      >
+      <Link to={'/search'} className={`${styles.footerSearchLink} bold`}>
         <SearchIcon
           width={23}
           height={23}
@@ -33,14 +32,13 @@ const FooterSocialAndSearch = () => {
   );
 };
 
+// Columns of links displayed in the form of a header followed by a set of related links
 const FooterLinks = ({ links }) => {
   return (
     <div className={styles.footerLinks}>
       {links.map(group => (
         <div className={styles.footerLinksColumn} key={group.name}>
-          <div className={[styles.footerLinkHeader, 'bold'].join(' ')}>
-            {group.name}
-          </div>
+          <div className={`${styles.footerLinkHeader} bold`}>{group.name}</div>
           <nav className={group.wrap ? styles.footerLinksWrap : ''}>
             {group.links.map(link => (
               <a
@@ -59,6 +57,11 @@ const FooterLinks = ({ links }) => {
   );
 };
 
+FooterLinks.propTypes = {
+  links: PropTypes.array.isRequired
+};
+
+// Legal Information and Links
 const FooterLegal = () => {
   return (
     <div className={styles.footerLegal}>
@@ -78,22 +81,32 @@ const FooterLegal = () => {
   );
 };
 
-const Footer = ({ banner, links }) => {
+/*
+  Simon Footer
+  Full width small banner to link to ad content
+  FooterSocialAndSearch: Social Icons for the theme along with a link to search
+  FooterLegal: Legal text and links
+*/
+const Footer = ({ theme }) => {
   return (
     <footer className={styles.footer}>
       <a
-        href={banner.href}
+        href={theme.banner.href}
         className={[styles.footerBannerLink, 'bold'].join(' ')}
       >
-        {banner.text}
+        {theme.banner.text}
       </a>
       <div className="container">
         <FooterSocialAndSearch />
-        <FooterLinks links={links} />
+        <FooterLinks links={theme.links} />
         <FooterLegal />
       </div>
     </footer>
   );
+};
+
+Footer.propTypes = {
+  theme: PropTypes.object.isRequired
 };
 
 export default Footer;

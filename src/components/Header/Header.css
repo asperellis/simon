@@ -98,6 +98,10 @@
   margin-left: 1.9152rem;
 }
 
+.headerSearchBtn.invisible {
+  visibility: hidden;
+}
+
 .headerNavOverlay {
   position: fixed;
   top: 74px;
@@ -210,6 +214,10 @@
 @media (--lg-viewport-up) {
   .headerLogo {
     flex: 0;
+  }
+
+  .headerSearchBtn.invisible {
+    display: none;
   }
 
   .headerNavBtn {

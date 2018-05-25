@@ -1,4 +1,5 @@
 @import './../../styles/variables.css';
+
 .footer {
   padding: 0 0 50px;
   font-size: 0.76968rem;
@@ -20,6 +21,7 @@
   text-decoration: none;
 }
 
+/* Search Link is hidden on mobile */
 .footerSearchLink {
   display: none;
 }
@@ -49,6 +51,7 @@
   margin-right: -15px;
 }
 
+/* Wrap class for a long list of links to wrap 2 in a row */
 .footerLinksWrap {
   display: flex;
   flex-wrap: wrap;
@@ -62,6 +65,10 @@
   flex: 1 0 100%;
 }
 
+/* 
+  On mobile viewports show ONLY the first column and links 1 & 3 of the second
+   Don't ask me why
+*/
 .footerLinksColumn:not(:nth-child(-n + 2)),
 .footerLinksColumn:nth-child(2)
   .footerLink:not(:first-of-type):not(:nth-child(3)) {
@@ -106,6 +113,7 @@
   .footerLinksColumn {
     flex: 1 0 25%;
   }
+  /* Show all the footer links */
   .footerLinksColumn:not(:nth-child(-n + 2)),
   .footerLinksColumn:nth-child(2)
     .footerLink:not(:first-of-type):not(:nth-child(3)) {
@@ -119,6 +127,7 @@
   .footerLinkHeader {
     display: block;
   }
+  /* On links that wrap make sure to apply the top margin to the second link as well */
   .footerLink:first-of-type,
   .footerLinksWrap .footerLink:nth-child(2) {
     margin-top: 0.6414rem;

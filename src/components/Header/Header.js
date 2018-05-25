@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { ask } from 'what-input';
 import { connect } from 'react-redux';
-import { getUserLocation } from './../../actions/App';
 import Dropdown from './../../components/Dropdowns/Dropdown';
 import Search from './../../components/Search/Search';
 import FadeInDown from './../Animations/FadeInDown';
@@ -15,12 +14,6 @@ const mapStateToProps = state => {
   return {
     user: state.user,
     search: state.search
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    getUserLocation: () => dispatch(getUserLocation())
   };
 };
 
@@ -132,7 +125,7 @@ const HeaderNavButton = ({ onClick, navOpen, ...attributes }) => {
 };
 
 const HeaderLogo = props => {
-  const Logo = props.Logo;
+  const Logo = props.logo;
   return (
     <Link to="/" aria-label="Simon homepage" className={styles.headerLogo}>
       <Logo
@@ -190,12 +183,17 @@ const HeaderNav = props => {
   );
 };
 
-const HeaderSearchButton = ({ onClick, searchOpen, ...attributes }) => {
+const HeaderSearchButton = ({
+  onClick,
+  searchOpen,
+  className,
+  ...attributes
+}) => {
   const Icon = searchOpen ? CloseIcon : SearchIcon;
   return (
     <button
       onClick={onClick}
-      className={styles.headerSearchBtn}
+      className={[styles.headerSearchBtn, className].join(' ')}
       aria-label="Search By Center Store or Location"
       {...attributes}
     >
@@ -221,7 +219,7 @@ const AdminHeader = () => {
     <div className={styles.adminHeader}>
       <div className="container">
         <div className={styles.headerContent}>
-          <HeaderLogo Logo={AdminLogo} fill={'#000'} />
+          <HeaderLogo logo={AdminLogo} fill={'#000'} />
           <HeaderNav links={navLinks} />
         </div>
       </div>
@@ -277,7 +275,7 @@ class Header extends Component {
 
   render() {
     const { navOpen, searchOpen } = this.state;
-    const { search, user } = this.props;
+    const { search, user, theme } = this.props;
     const adminLoggedIn = user.status === 'LOGGED_IN';
     return (
       <header className={styles.header}>
@@ -296,9 +294,9 @@ class Header extends Component {
               }}
               navOpen={navOpen}
             />
-            <HeaderLogo Logo={this.props.Logo} />
+            <HeaderLogo logo={theme.logo} />
             <HeaderNav
-              links={this.props.links}
+              links={theme.links}
               navOpen={navOpen}
               toggleNav={this.toggleNav}
               adminLoggedIn={adminLoggedIn}
@@ -308,17 +306,15 @@ class Header extends Component {
                 onClick={this.toggleSearch}
                 searchOpen={searchOpen}
                 onFocus={searchOpen ? undefined : this.toggleSearch}
-                style={search.toggle ? {} : { visibility: 'hidden' }}
+                className={search.toggle ? '' : styles.invisible}
               />
             )}
           </div>
         </div>
         <FadeInDown in={search.include && searchOpen} duration={300}>
           <Search
-            allowLocation={user.location}
-            getUserLocation={this.props.getUserLocation}
             canToggle={search.toggle}
-            quickLinks={this.props.quickLinks}
+            quickLinks={theme.quickLinks}
             toggleSearch={this.toggleSearch}
           />
         </FadeInDown>
@@ -336,4 +332,4 @@ class Header extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default connect(mapStateToProps)(Header);

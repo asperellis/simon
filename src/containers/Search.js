@@ -18,12 +18,6 @@ const mapStateToProps = state => {
 class Search extends Component {
   componentDidMount() {
     this.props.setSearchToggle(false);
-    if (
-      this.props.match.params.query === 'your-location' &&
-      !this.props.user.location.latitude
-    ) {
-      this.props.getUserLocation();
-    }
   }
 
   componentWillUnmount() {
@@ -34,6 +28,7 @@ class Search extends Component {
     const { query } = this.props.match.params;
     const { location } = this.props.user;
     const locationSearch = query === 'your-location';
+    const userHasLocation = location && location.latitude && location.longitude;
     return (
       <div className="container">
         <h1>
@@ -41,15 +36,25 @@ class Search extends Component {
             ? 'Search Page searching for ' + query
             : 'No Search query so show all the things'}
         </h1>
-        {location &&
-          location.latitude &&
-          locationSearch && (
+        {locationSearch &&
+          userHasLocation && (
             <p>
               LOCATION SEARCH! BOOM:<br />
               {`Latitude ${location.latitude}, 
               Longitude ${location.longitude}`}
             </p>
           )}
+        {locationSearch &&
+          !userHasLocation && (
+            <div>
+              <p>
+                Location is blocked OR user has manually hit this route and must
+                ask for location based results again
+              </p>
+              <button onClick={this.props.getUserLocation}>CLICK TO ASK</button>
+            </div>
+          )}
+
         <p>
           This is an example of a page with a search open by default. Toggling
           removed to disallow the bar to be closed and prevent awkward white

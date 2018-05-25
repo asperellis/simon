@@ -107,11 +107,11 @@ const THEMES = {
   simon: {
     header: {
       links: HEADER_LINKS,
-      logo: SimonLogo
-    },
-    search: {
-      quickLinks: HEADER_SEARCH_QUICK_LINKS
-      // could also add autocomplete url here
+      logo: SimonLogo,
+      search: {
+        quickLinks: HEADER_SEARCH_QUICK_LINKS
+        // could also add autocomplete url here
+      }
     },
     footer: {
       banner: {
@@ -124,17 +124,17 @@ const THEMES = {
   premiumOutlets: {
     header: {
       links: [...HEADER_LINKS, HeaderNavVipDropdown],
-      logo: PremiumOutletsLogo
-    },
-    search: {
-      quickLinks: [
-        ...HEADER_SEARCH_QUICK_LINKS.slice(0, 4),
-        {
-          href: 'http://www.simon.com/brands',
-          text: 'PO Specific Quick Link'
-        }
-      ]
-      // could also add autocomplete url here
+      logo: PremiumOutletsLogo,
+      search: {
+        quickLinks: [
+          ...HEADER_SEARCH_QUICK_LINKS.slice(0, 4),
+          {
+            href: 'http://www.simon.com/brands',
+            text: 'PO Specific Quick Link'
+          }
+        ]
+        // could also add autocomplete url here
+      }
     },
     footer: {
       banner: {
@@ -185,11 +185,11 @@ const THEMES = {
   giftcard: {
     header: {
       links: HEADER_LINKS,
-      logo: GiftcardLogo
-    },
-    search: {
-      quickLinks: HEADER_SEARCH_QUICK_LINKS
-      // could also add autocomplete url here
+      logo: GiftcardLogo,
+      search: {
+        quickLinks: HEADER_SEARCH_QUICK_LINKS
+        // could also add autocomplete url here
+      }
     },
     footer: {
       banner: {
@@ -215,67 +215,25 @@ class DefaultLayout extends Component {
     this.state = {
       theme: 'simon'
     };
-
-    this.changeTheme = this.changeTheme.bind(this);
-  }
-
-  changeTheme(theme) {
-    this.setState({ theme });
   }
 
   render() {
     const theme = THEMES[this.state.theme];
     const { user, search } = this.props;
     const contentPad = 1 + (user.status === 'LOGGED_IN') + !search.toggle;
-    // temp for theme testing
-    const tempBtnStyles = {
-      backgroundColor: '#000',
-      color: '#fff',
-      padding: '10px 25px',
-      marginRight: '10px',
-      fontSize: '.7rem'
-    };
+    const hasSeenCookieMessage = docCookies.getItem('seen_cookie_message');
+    const mainClass = styles[`contentPad${contentPad}`];
 
     return (
       <div>
         {theme ? (
           <div>
-            <Header
-              Logo={theme.header.logo}
-              links={theme.header.links}
-              quickLinks={theme.search.quickLinks}
-            />
-            {!docCookies.getItem('seen_cookie_message') && <CookieMessage />}
-            <main
-              className={styles[`contentPad${contentPad}`]}
-              id="site-content"
-              tabIndex="-1"
-            >
+            <Header theme={theme.header} />
+            {!hasSeenCookieMessage && <CookieMessage />}
+            <main className={mainClass} id="site-content" tabIndex="-1">
               {this.props.children}
-
-              {/* TEMP FOR THEME TESTING */}
-              <div className="container">
-                <button
-                  style={tempBtnStyles}
-                  onClick={() => this.changeTheme('simon')}
-                >
-                  CHANGE TO SIMON THEME
-                </button>
-                <button
-                  style={tempBtnStyles}
-                  onClick={() => this.changeTheme('premiumOutlets')}
-                >
-                  CHANGE TO PO THEME
-                </button>
-                <button
-                  style={tempBtnStyles}
-                  onClick={() => this.changeTheme('giftcard')}
-                >
-                  CHANGE TO GIFTCARD THEME
-                </button>
-              </div>
             </main>
-            <Footer banner={theme.footer.banner} links={theme.footer.links} />
+            <Footer theme={theme.footer} />
           </div>
         ) : (
           this.props.children

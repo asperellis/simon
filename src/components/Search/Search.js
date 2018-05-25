@@ -5,10 +5,24 @@ import NavIcon from './../../images/icons/nav.svg';
 import FadeInRight from './../Animations/FadeInRight';
 import ExpandDown from './../Animations/ExpandDown';
 import API from './../../api/api';
+import { connect } from 'react-redux';
+import { getUserLocation } from './../../actions/App';
 import { Link } from 'react-router-dom';
 import { ask } from 'what-input';
 import { debounce } from './../../utils/utils';
 import { withRouter } from 'react-router-dom';
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getUserLocation: () => dispatch(getUserLocation())
+  };
+};
+
+const mapStateToProps = state => {
+  return {
+    user: state.user
+  };
+};
 
 const HeaderSearchButton = ({ onClick, ...attributes }) => {
   return (
@@ -69,6 +83,7 @@ class HeaderSearchForm extends Component {
           className={styles.headerSearchInput}
           name="headerSearchInput"
           id="headerSearchInput"
+          value={query}
           ref={inputRef}
           onKeyDown={handleKeyDown}
           onFocus={() => {
@@ -94,7 +109,7 @@ const HeaderSearchSuggestions = ({
   quickLinks,
   ...attributes
 }) => {
-  const links = suggestions || quickLinks;
+  const links = suggestions || quickLinks || [];
 
   return (
     <div
@@ -107,7 +122,9 @@ const HeaderSearchSuggestions = ({
       <div className="container">
         <div className={styles.headerSearchSuggestionsContent}>
           <div className={styles.headerSearchQuickLinksHeader}>
-            {suggestions ? 'Suggested Results' : 'Quick Links'}
+            {suggestions || (!quickLinks || !quickLinks.length)
+              ? 'Suggested Results'
+              : 'Quick Links'}
           </div>
           <div
             className={
@@ -285,11 +302,16 @@ class Search extends Component {
                 inputRef={this.searchInput}
               />
             </FadeInRight>
-            {this.props.allowLocation && (
+            {this.props.user.location && (
               <button
                 type="button"
                 onClick={() => {
                   this.props.getUserLocation();
+                  this.setState({
+                    query: '',
+                    querySuggestions: null,
+                    showSuggestions: false
+                  });
                   this.props.history.push('/search/your-location');
                 }}
                 className={[styles.headerSearchFindNearbyButton, 'light'].join(
@@ -321,4 +343,4 @@ class Search extends Component {
   }
 }
 
-export default withRouter(Search);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Search));
