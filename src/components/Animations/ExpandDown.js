@@ -1,16 +1,22 @@
 import React from 'react';
 import Transition from 'react-transition-group/Transition';
+import PropTypes from 'prop-types';
 
-const ExpandDown = ({ children, duration, delay = 0, in: inProp }) => {
+// Transition Wrapper for Animating a component or element by expanding it from the top
+// duration is the length of all transitions, delay is optional
+// inProp is the condition when Transition comes in
+const ExpandDown = ({ duration = 300, delay = 0, in: inProp, children }) => {
   const defaultStyle = {
     // Transition "opacity" and "transform" CSS properties.
     // Set duration of the transition to the duration of the animation.
+    // Transform origin is set to the top so when scaled by Y-axis it will expand down
     transition: `${duration}ms ease-out`,
     transitionProperty: 'opacity, transform',
     transitionDelay: `${delay}ms`,
     transformOrigin: 'center top'
   };
 
+  // add an opacity transition to children so they don't show scaled from parents transition
   const defaultChildStyle = {
     opacity: 0,
     transition: `opacity ${duration}ms ease ${duration}`
@@ -21,17 +27,17 @@ const ExpandDown = ({ children, duration, delay = 0, in: inProp }) => {
   // 'transitionStyles' object matches the name of a
   // 'status' provided by <Transition />.
   const transitionStyles = {
-    // Start with component invisible and shifted up by 10%
+    // Start with component invisible and scaled down on the Y-axis to 0
     entering: {
       opacity: 0,
       transform: 'scaleY(0)'
     },
-    // Transition to component being visible and having its position reset.
+    // Transition to component being visible and fully expanded
     entered: {
       opacity: 1,
       transform: 'scaleY(1)'
     },
-    // Fade element out and slide it back up on exit.
+    // Fade element out and scale it back down.
     exiting: {
       opacity: 0,
       transform: 'scaleY(0)',
@@ -40,16 +46,16 @@ const ExpandDown = ({ children, duration, delay = 0, in: inProp }) => {
   };
 
   const childTransitionStyles = {
-    // Start with component invisible and shifted up by 10%
+    // Start with component invisible
     entering: {
       opacity: 0
     },
-    // Transition to component being visible and having its position reset.
+    // Transition to component being visible delayed by the expanding down transition
     entered: {
       opacity: 1,
       transition: `opacity ${duration}ms ease ${duration}ms`
     },
-    // Fade element out and slide it back up on exit.
+    // Fade elements out by half of the parents expand back up .
     exiting: {
       opacity: 0,
       transition: `opacity ${duration / 2}ms ease 0ms`
@@ -90,6 +96,12 @@ const ExpandDown = ({ children, duration, delay = 0, in: inProp }) => {
       }}
     </Transition>
   );
+};
+
+ExpandDown.propTypes = {
+  duration: PropTypes.number,
+  delay: PropTypes.number,
+  in: PropTypes.any.isRequired
 };
 
 export default ExpandDown;

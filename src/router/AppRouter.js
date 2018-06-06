@@ -4,6 +4,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { default as Layout } from '../layouts/DefaultLayout';
 import Home from './../containers/Home';
 import Search from './../containers/Search';
+import Brand from './../containers/Brand';
 import Mall from './../containers/Mall';
 import ErrorPage from './../containers/Error';
 
@@ -15,7 +16,7 @@ const AppRouter = () => {
           <Route exact path="/" component={Home} />
           <Route exact path="/search" component={Search} />
           <Route path="/search/:query" component={Search} />
-          <Route path="/brand/:query" component={Search} />
+          <Route path="/brand/:brandName" component={Brand} />
           <Route exact path="/mall" component={Mall} />
           <Route
             path="/mall/:shortName"

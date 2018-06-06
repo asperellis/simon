@@ -8,7 +8,7 @@ import Footer from './../components/Footer/Footer';
 import SimonLogo from './../images/logos/simon.svg';
 import PremiumOutletsLogo from './../images/logos/premium-outlets.svg';
 import GiftcardLogo from './../images/logos/giftcard.svg';
-import CookieMessage from './../components/CookieMessage/CookieMessage';
+import CookieBanner from './../components/CookieBanner/CookieBanner';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { docCookies } from './../utils/utils';
@@ -118,6 +118,13 @@ const THEMES = {
         text: 'BECOME A MALL INSIDER. JOIN TODAY',
         href: 'https://www.simon.com/mall-insider'
       },
+      socialNetworks: {
+        facebook: 'https://www.facebook.com',
+        twitter: 'https://www.twitter.com',
+        youtube: 'https://www.youtube.com',
+        simon: 'https://www.simon.com',
+        instagram: 'https://www.instagram.com'
+      },
       links: FOOTER_LINKS
     }
   },
@@ -140,6 +147,13 @@ const THEMES = {
       banner: {
         text: 'JOIN THE VIP CLUB TODAY',
         href: 'https://www.premiumoutlets.com/vip/register'
+      },
+      socialNetworks: {
+        facebook: 'https://www.facebook.com',
+        twitter: 'https://www.twitter.com',
+        youtube: 'https://www.youtube.com',
+        simon: 'https://www.simon.com',
+        instagram: 'https://www.instagram.com'
       },
       links: [
         ...FOOTER_LINKS.filter(
@@ -196,6 +210,13 @@ const THEMES = {
         text: 'CHECK YOUR CARD BALANCE',
         href: 'https://www.simon.com/giftcard/card_balance.aspx'
       },
+      socialNetworks: {
+        facebook: 'https://www.facebook.com',
+        twitter: 'https://www.twitter.com',
+        youtube: 'https://www.youtube.com',
+        simon: 'https://www.simon.com',
+        instagram: 'https://www.instagram.com'
+      },
       links: FOOTER_LINKS
     }
   }
@@ -204,7 +225,7 @@ const THEMES = {
 const mapStateToProps = state => {
   return {
     user: state.user,
-    search: state.search
+    searchSettings: state.searchSettings
   };
 };
 
@@ -213,24 +234,29 @@ class DefaultLayout extends Component {
     super(props);
 
     this.state = {
-      theme: 'simon'
+      theme: 'premiumOutlets'
     };
   }
 
   render() {
     const theme = THEMES[this.state.theme];
-    const { user, search } = this.props;
-    const contentPad = 1 + (user.status === 'LOGGED_IN') + !search.toggle;
+    const { user, searchSettings } = this.props;
+    const contentPad =
+      1 + (user.status === 'LOGGED_IN') + !searchSettings.toggle;
     const hasSeenCookieMessage = docCookies.getItem('seen_cookie_message');
     const mainClass = styles[`contentPad${contentPad}`];
+    const MAIN_CONTENT_ID = 'site-content';
 
     return (
       <div>
         {theme ? (
           <div>
+            <a href={`#${MAIN_CONTENT_ID}`} className={styles.skipToContent}>
+              Skip To Content
+            </a>
             <Header theme={theme.header} />
-            {!hasSeenCookieMessage && <CookieMessage />}
-            <main className={mainClass} id="site-content" tabIndex="-1">
+            {!hasSeenCookieMessage && <CookieBanner />}
+            <main className={mainClass} id={MAIN_CONTENT_ID} tabIndex="-1">
               {this.props.children}
             </main>
             <Footer theme={theme.footer} />

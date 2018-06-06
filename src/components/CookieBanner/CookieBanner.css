@@ -1,6 +1,6 @@
 @import './../../styles/variables.css';
 
-.cookieMessage {
+.cookieBanner {
   position: fixed;
   bottom: 0;
   right: 0;
@@ -9,20 +9,16 @@
   color: #fff;
   text-align: center;
   padding: 10px 15px;
-}
-
-.cookieMessage p {
-  margin: 0;
   line-height: 1;
 }
 
-.cookieMessage a {
+.cookieBanner a {
   color: #fff;
   text-decoration: underline;
 }
 
-.cookieMessage a:hover,
-.cookieMessage a:focus {
+.cookieBanner a:hover,
+.cookieBanner a:focus {
   color: #fff;
   text-decoration: underline;
   outline-color: #fff;

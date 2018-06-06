@@ -8,20 +8,24 @@ import FadeInDown from './../Animations/FadeInDown';
 import styles from './Header.css';
 import SearchIcon from './../../images/icons/search.svg';
 import CloseIcon from './../../images/icons/close.svg';
+import SimonLogo from './../../images/logos/simon.svg';
 import AdminLogo from './../../images/logos/simon-central.svg';
+import PropTypes from 'prop-types';
 
 const mapStateToProps = state => {
   return {
     user: state.user,
-    search: state.search
+    searchSettings: state.searchSettings
   };
 };
 
+// Dropdown Button in the global header for Premium Outlets Only
+// Contains login form for user to login to VIP Club
 export const HeaderNavVipDropdown = props => {
   return (
     <Dropdown
       text={'VIP CLUB'}
-      buttonClassName={[styles.headerNavLink, 'bold'].join(' ')}
+      buttonClasses={`${styles.headerNavLink} bold`}
       dropOnHover={true}
       direction={'right'}
     >
@@ -227,12 +231,24 @@ const AdminHeader = () => {
   );
 };
 
+/*
+  Header Component
+
+  Simon branded bar at the top of a layout.
+  Includes:
+  AdminHeader: admin header for logged in admins offering cms urls
+  HeaderLogo: svg logo provided by the theme prop
+  HeaderNav: Nav of links provided by the theme prop
+  Mobile Nav Button: Hamburger nav for mobile nav toggling
+  Search: Component for globally searching throughout the site browsing experience
+*/
 class Header extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      searchOpen: !this.props.search.toggle || false,
+      // if the searchSettings disallow toggling then the search bar should always be open
+      searchOpen: this.props.searchSettings.toggle ? true : false,
       navOpen: false
     };
 
@@ -241,33 +257,35 @@ class Header extends Component {
   }
 
   static getDerivedStateFromProps(nextProps) {
-    if (nextProps.search.toggle) {
-      return { searchOpen: false };
-    }
-    return { searchOpen: !nextProps.search.toggle };
+    // if the search can toggle, close the search otherwise open it
+    return { searchOpen: !nextProps.searchSettings.toggle };
   }
 
+  // toggle the search, close the mobile nav - they both shouldn't be open at the same time
+  // remove class off the documentElement which sets overflow to hidden for the mobile nav
   toggleSearch() {
     this.setState(
-      { searchOpen: !this.state.searchOpen, navOpen: false },
-      () => {
-        document.documentElement.classList.remove(styles.headerNavOpen);
-      }
+      prevState => ({
+        searchOpen: !prevState.searchOpen,
+        navOpen: false
+      }),
+      document.documentElement.classList.remove(styles.headerNavOpen)
     );
   }
 
+  // toggle the mobile navigation, close the search - they both shouldn't be open at the same time
+  // add class off the documentElement which sets overflow to hidden for the mobile nav
   toggleNav() {
-    const htmlTag = document.documentElement;
     this.setState(
-      {
-        navOpen: !this.state.navOpen,
-        searchOpen: !this.props.search.toggle || false
-      },
+      prevState => ({
+        searchOpen: this.props.searchSettings.toggle ? true : false,
+        navOpen: !prevState.navOpen
+      }),
       () => {
         if (this.state.navOpen) {
-          htmlTag.classList.add(styles.headerNavOpen);
+          document.documentElement.classList.add(styles.headerNavOpen);
         } else {
-          htmlTag.classList.remove(styles.headerNavOpen);
+          document.documentElement.classList.remove(styles.headerNavOpen);
         }
       }
     );
@@ -275,13 +293,15 @@ class Header extends Component {
 
   render() {
     const { navOpen, searchOpen } = this.state;
-    const { search, user, theme } = this.props;
+    const {
+      searchSettings,
+      user,
+      theme = { logo: SimonLogo, links: [], search: {} }
+    } = this.props;
     const adminLoggedIn = user.status === 'LOGGED_IN';
+
     return (
       <header className={styles.header}>
-        <a href="#site-content" className={styles.headerSkipToContent}>
-          Skip To Content
-        </a>
         {adminLoggedIn && <AdminHeader />}
         <div className="container">
           <div className={styles.headerContent}>
@@ -301,20 +321,20 @@ class Header extends Component {
               toggleNav={this.toggleNav}
               adminLoggedIn={adminLoggedIn}
             />
-            {search.include && (
+            {searchSettings.include && (
               <HeaderSearchButton
                 onClick={this.toggleSearch}
                 searchOpen={searchOpen}
                 onFocus={searchOpen ? undefined : this.toggleSearch}
-                className={search.toggle ? '' : styles.invisible}
+                className={searchSettings.toggle ? '' : styles.invisible}
               />
             )}
           </div>
         </div>
-        <FadeInDown in={search.include && searchOpen} duration={300}>
+        <FadeInDown in={searchSettings.include && searchOpen} duration={300}>
           <Search
-            canToggle={search.toggle}
-            quickLinks={theme.quickLinks}
+            canToggle={searchSettings.toggle}
+            quickLinks={theme.search.quickLinks}
             toggleSearch={this.toggleSearch}
           />
         </FadeInDown>
@@ -331,5 +351,9 @@ class Header extends Component {
     );
   }
 }
+
+Header.propTypes = {
+  theme: PropTypes.object.isRequired
+};
 
 export default connect(mapStateToProps)(Header);

@@ -10,7 +10,7 @@ const user = (state = { location: {}, status: 'LOGGED_OUT' }, action) => {
   return state;
 };
 
-const search = (state = { toggle: true, include: true }, action) => {
+const searchSettings = (state = { toggle: true, include: true }, action) => {
   if (action.type === 'SET_SEARCH') {
     return { ...state, include: action.include };
   } else if (action.type === 'SET_SEARCH_TOGGLE') {
@@ -21,7 +21,7 @@ const search = (state = { toggle: true, include: true }, action) => {
 
 const appReducer = combineReducers({
   user,
-  search
+  searchSettings
 });
 
 export default appReducer;

@@ -1,7 +1,11 @@
 import React from 'react';
 import Transition from 'react-transition-group/Transition';
+import PropTypes from 'prop-types';
 
-const FadeInDown = ({ children, duration, delay = 0, in: inProp }) => {
+// Transition Wrapper for Animating a component or element by moving it down by its height while it slowly becomes visible
+// duration is the length of all transitions, delay is optional
+// inProp is the condition when Transition comes in
+const FadeInDown = ({ duration = 300, delay = 0, in: inProp, children }) => {
   const defaultStyle = {
     // Transition "opacity" and "transform" CSS properties.
     // Set duration of the transition to the duration of the animation.
@@ -15,7 +19,7 @@ const FadeInDown = ({ children, duration, delay = 0, in: inProp }) => {
   // 'transitionStyles' object matches the name of a
   // 'status' provided by <Transition />.
   const transitionStyles = {
-    // Start with component invisible and shifted up by 10%
+    // Start with component invisible and shifted up by 100%
     entering: {
       opacity: 0,
       transform: 'translateY(-100%)'
@@ -50,12 +54,19 @@ const FadeInDown = ({ children, duration, delay = 0, in: inProp }) => {
         // Apply different styles to children based
         // on the current value of 'status'.
         const currentStyles = transitionStyles[status];
+
         return React.cloneElement(children, {
           style: Object.assign({}, defaultStyle, currentStyles)
         });
       }}
     </Transition>
   );
+};
+
+FadeInDown.propTypes = {
+  duration: PropTypes.number,
+  delay: PropTypes.number,
+  in: PropTypes.any.isRequired
 };
 
 export default FadeInDown;

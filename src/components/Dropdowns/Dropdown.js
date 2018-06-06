@@ -1,98 +1,112 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import styles from './Dropdown.css';
 import ExpandDown from './../Animations/ExpandDown';
+import PropTypes from 'prop-types';
 
-const DropdownContent = ({ children, direction, ...attributes }) => {
-  return (
-    <div
-      className={[styles.dropdownContent, styles[direction]].join(' ')}
-      {...attributes}
-    >
-      {children}
-    </div>
-  );
-};
-
-class Dropdown extends Component {
+// Dropdown Component. Wrap any elements or components
+// Produces a button with supplied text and hides all children in a dropdown wrapper
+// Expands on click or hover of the button based on props
+class Dropdown extends PureComponent {
   constructor(props) {
     super(props);
 
+    // if the dropdown isnt open and the mouse isnt over the button or the contents then close the dropdown
     this.state = {
       dropdownOpen: false,
       mouseOverButton: false,
-      mouseOverMenu: false
+      mouseOverContent: false
     };
 
+    // so we can clear timeouts
     this.buttonTimeout = null;
     this.menuTimeout = null;
+
     this.toggleDropdown = this.toggleDropdown.bind(this);
   }
 
+  // click event of the button
   toggleDropdown() {
-    this.setState({ dropdownOpen: !this.state.dropdownOpen });
+    this.setState(prevState => ({
+      dropdownOpen: prevState.dropdownOpen
+    }));
   }
 
+  // the mouse is over the button
   enterButton = () => {
     clearTimeout(this.buttonTimeout);
     this.setState({ mouseOverButton: true });
   };
 
+  // the mouse has left the button
   leaveButton = () => {
     this.buttonTimeout = setTimeout(() => {
       this.setState({ mouseOverButton: false });
     }, 500);
   };
 
+  // the mouse is over the dropdown contents so it shouldnt close
   enterMenu = () => {
     clearTimeout(this.menuTimeout);
-    this.setState({ mouseOverMenu: true });
+    this.setState({ mouseOverContent: true });
   };
 
+  // the mouse is not over the dropdown content
   leaveMenu = () => {
     this.menuTimeout = setTimeout(() => {
-      this.setState({ mouseOverMenu: false });
+      this.setState({ mouseOverContent: false });
     }, 500);
   };
 
   render() {
-    const open = this.state.mouseOverButton || this.state.mouseOverMenu;
     const {
-      text,
-      dropOnHover,
+      text = 'Expand',
+      dropOnHover = false,
       children,
-      buttonClassName,
-      direction
+      buttonClasses = '',
+      direction = 'left'
     } = this.props;
+
+    // dropdown is open if the mouse/focus is on the button or the dropdown contents or if the user has clicked the button to open it
+    const isOpen =
+      this.state.mouseOverButton ||
+      this.state.mouseOverContent ||
+      this.state.dropdownOpen;
+
+    // events that update the state of the dropdown being open or closed
+    const userEvents = {
+      onMouseEnter: dropOnHover ? this.enterMenu : undefined,
+      onMouseLeave: dropOnHover ? this.leaveMenu : undefined,
+      onFocus: dropOnHover ? this.enterMenu : undefined,
+      onBlur: dropOnHover ? this.leaveMenu : undefined
+    };
+
     return (
       <div className={styles.dropdown}>
         <button
-          className={[styles.dropdownToggle, buttonClassName].join(' ')}
+          className={`${styles.dropdownToggle} ${buttonClasses}`}
           onClick={dropOnHover ? undefined : this.toggleDropdown}
-          onMouseEnter={dropOnHover ? this.enterButton : undefined}
-          onFocus={dropOnHover ? this.enterButton : undefined}
-          onBlur={dropOnHover ? this.leaveButton : undefined}
-          onMouseLeave={dropOnHover ? this.leaveButton : undefined}
+          {...userEvents}
         >
           {text}
         </button>
-        <ExpandDown
-          in={open || this.state.dropdownOpen}
-          duration={300}
-          delay={0}
-        >
-          <DropdownContent
-            onMouseEnter={dropOnHover ? this.enterMenu : undefined}
-            onMouseLeave={dropOnHover ? this.leaveMenu : undefined}
-            onFocus={dropOnHover ? this.enterMenu : undefined}
-            onBlur={dropOnHover ? this.leaveMenu : undefined}
-            direction={direction}
+        <ExpandDown in={isOpen}>
+          <div
+            className={`${styles.dropdownContent} ${styles[direction]}`}
+            {...userEvents}
           >
             {children}
-          </DropdownContent>
+          </div>
         </ExpandDown>
       </div>
     );
   }
 }
+
+Dropdown.propTypes = {
+  text: PropTypes.string.isRequired,
+  buttonClasses: PropTypes.string,
+  dropOnHover: PropTypes.bool,
+  direction: PropTypes.string
+};
 
 export default Dropdown;

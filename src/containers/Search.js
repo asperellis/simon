@@ -38,22 +38,22 @@ class Search extends Component {
         </h1>
         {locationSearch &&
           userHasLocation && (
-            <p>
+          <p>
               LOCATION SEARCH! BOOM:<br />
-              {`Latitude ${location.latitude}, 
+            {`Latitude ${location.latitude}, 
               Longitude ${location.longitude}`}
-            </p>
-          )}
+          </p>
+        )}
         {locationSearch &&
           !userHasLocation && (
-            <div>
-              <p>
+          <div>
+            <p>
                 Location is blocked OR user has manually hit this route and must
                 ask for location based results again
-              </p>
-              <button onClick={this.props.getUserLocation}>CLICK TO ASK</button>
-            </div>
-          )}
+            </p>
+            <button onClick={this.props.getUserLocation}>CLICK TO ASK</button>
+          </div>
+        )}
 
         <p>
           This is an example of a page with a search open by default. Toggling

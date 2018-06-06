@@ -223,7 +223,9 @@ class Search extends Component {
             this.props.history.push(querySuggestions[cursor - 1].href);
             this.searchInput.current.blur();
             this.showSuggestions(false);
-            this.props.toggleSearch();
+            if (this.props.canToggle) {
+              this.props.toggleSearch();
+            }
             window.scrollTo({
               top: 0,
               behavior: 'smooth'

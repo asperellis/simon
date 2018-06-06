@@ -1,3 +1,5 @@
+@import './../../styles/variables.css';
+
 .dropdown,
 .dropdownToggle {
   position: relative;
@@ -10,7 +12,7 @@
   padding: 15px;
   width: 300px;
   backface-visibility: hidden;
-  border: 1px solid #b4b2b0;
+  border: 1px solid var(--brand-gray);
 }
 
 .dropdownContent.right {

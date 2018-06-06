@@ -32,12 +32,12 @@ class Home extends Component {
         <h1>Home Page</h1>
         {location &&
           location.latitude && (
-            <p>
+          <p>
               User Location:<br />
-              {`Latitude ${location.latitude}, 
-              Longitude ${location.longitude}`}
-            </p>
-          )}
+            {`Latitude ${location.latitude},
+        Longitude ${location.longitude}`}
+          </p>
+        )}
         <p>
           This is an example of a page with a search open by default. Toggling
           removed to disallow the bar to be closed and prevent awkward white
