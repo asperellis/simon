@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { ask } from 'what-input';
-import { connect } from 'react-redux';
 import Dropdown from './../../components/Dropdowns/Dropdown';
 import Search from './../../components/Search/Search';
 import FadeInDown from './../Animations/FadeInDown';
@@ -11,17 +10,11 @@ import CloseIcon from './../../images/icons/close.svg';
 import SimonLogo from './../../images/logos/simon.svg';
 import AdminLogo from './../../images/logos/simon-central.svg';
 import PropTypes from 'prop-types';
-
-const mapStateToProps = state => {
-  return {
-    user: state.user,
-    searchSettings: state.searchSettings
-  };
-};
+import { docCookies } from './../../utils/utils';
 
 // Dropdown Button in the global header for Premium Outlets Only
 // Contains login form for user to login to VIP Club
-export const HeaderNavVipDropdown = props => {
+export const HeaderNavVipDropdown = () => {
   return (
     <Dropdown
       text={'VIP CLUB'}
@@ -29,8 +22,13 @@ export const HeaderNavVipDropdown = props => {
       dropOnHover={true}
       direction={'right'}
     >
-      {props.userLoggedIn ? (
-        <div>LOGGED IN!</div>
+      {docCookies.getItem('vipUser') ? (
+        <div className="dropdown-menu">
+          <div>LOGGED IN!</div>
+          <p>The Cookie is there</p>
+          <p>{JSON.parse(docCookies.getItem('vipUser')).name}</p>
+          <p>{JSON.parse(docCookies.getItem('vipUser')).preferredOutletName}</p>
+        </div>
       ) : (
         <div className="dropdown-menu">
           <div>VIP CLUB</div>
@@ -112,94 +110,102 @@ export const HeaderNavVipDropdown = props => {
   );
 };
 
-const HeaderNavButton = ({ onClick, navOpen, ...attributes }) => {
-  const classNames = [styles.headerNavBtn, navOpen ? styles.open : ''].join(
-    ' '
-  );
+// Header Logo Component
+// Takes an SVG logo image, a height and fill and wraps in a link back to route
+const HeaderLogo = ({ Logo = SimonLogo, height = 35.6, fill = '#fff' }) => {
   return (
-    <button
-      aria-label="Toggle Site Navigation"
-      className={classNames}
-      onClick={onClick}
-      {...attributes}
-    >
-      <span className={styles.headerNavBtnIcon} />
-    </button>
-  );
-};
-
-const HeaderLogo = props => {
-  const Logo = props.logo;
-  return (
-    <Link to="/" aria-label="Simon homepage" className={styles.headerLogo}>
-      <Logo
-        height={props.height || 35.6}
-        fill={props.fill || '#fff'}
-        className={styles.headerLogoSvg}
-      />
+    <Link to="/" aria-label="Return To Homepage" className={styles.headerLogo}>
+      <Logo height={height} fill={fill} className={styles.headerLogoSvg} />
     </Link>
   );
 };
 
-const HeaderNav = props => {
-  const navClasses = [
-    styles.headerNav,
-    props.navOpen ? styles.open : '',
-    props.adminLoggedIn ? styles.navAdminPad : ''
-  ].join(' ');
-  const isLastLink = i => i === props.links.length - 1;
+HeaderLogo.propTypes = {
+  Logo: PropTypes.func,
+  height: PropTypes.number,
+  fill: PropTypes.string
+};
+
+// Header Nav Component
+// Takes an array of links and outputs them as a horiz nav in the header
+// The links inside the links array could be objects with text & href properties
+// OR Dropdown components like a shopping cart or VIP login
+const HeaderNav = ({
+  links = [],
+  navOpen = false,
+  adminLoggedIn = false,
+  toggleNav
+}) => {
+  // used for a11y, toggles the nav based on the last link
+  const isLastNavLink = i => i === links.length - 1;
+
+  // if youre tabbing through toggle mobile nav and tab by the last link, toggle the nav
   const toggleNavOnKey = e => {
     if (e.key === 'Tab' && !e.shiftKey) {
-      props.toggleNav();
+      toggleNav();
     }
   };
 
+  // the root nav element has a list of classes. here's some detail
+  // add open class if the nav is open to transform it into view
+  // add a padding class if the user is logged in so the nav is positioned correctly event with an admin header
   return (
-    <nav className={navClasses}>
-      {props.links.map((link, index) => {
+    <nav
+      className={`${styles.headerNav} ${navOpen ? styles.open : ''} ${
+        adminLoggedIn ? styles.navAdminPad : ''
+      }`}
+    >
+      {links.map((link, index) => {
+        // if the link is indeed a true link
         if (link.href) {
           return (
             <a
               href={link.href}
-              className={[styles.headerNavLink, 'bold'].join(' ')}
+              className={`${styles.headerNavLink} bold`}
               key={link.text + index}
-              onFocus={!props.navOpen ? props.toggleNav : undefined}
-              onKeyDown={isLastLink(index) ? toggleNavOnKey : undefined}
+              onFocus={!navOpen ? toggleNav : undefined}
+              onKeyDown={isLastNavLink(index) ? toggleNavOnKey : undefined}
             >
               {link.text}
             </a>
           );
         }
-        const DropdownLink = link;
-        return (
-          <DropdownLink
-            key={index}
-            onBlur={
-              isLastLink(index) && props.navOpen ? toggleNavOnKey : undefined
-            }
-            onFocus={
-              isLastLink(index) && !props.navOpen ? toggleNavOnKey : undefined
-            }
-          />
-        );
+
+        // otherwise it's a dropdown like a shopping cart or vip login
+        const DropdownButton = link;
+
+        // TODO: this doesnt work onBlur or onFocus isLastNavLink(index) && navOpen ? toggleNavOnKey : undefined
+        return <DropdownButton key={index} />;
       })}
     </nav>
   );
 };
 
+HeaderNav.propTypes = {
+  links: PropTypes.array.isRequired,
+  navOpen: PropTypes.bool,
+  toggleNav: PropTypes.func,
+  adminLoggedIn: PropTypes.bool
+};
+
+// Header Search Button
+// Button that opens and closes the search bar - if you can toggle it
+// Will be invisible if its one of the handfull of views that open search on load
 const HeaderSearchButton = ({
-  onClick,
-  searchOpen,
-  className,
-  ...attributes
+  toggleSearch,
+  searchOpen = false,
+  canToggle = true
 }) => {
   const Icon = searchOpen ? CloseIcon : SearchIcon;
+
   return (
     <button
-      onClick={onClick}
-      className={[styles.headerSearchBtn, className].join(' ')}
+      onClick={toggleSearch}
+      onFocus={searchOpen ? undefined : toggleSearch}
+      className={`${styles.headerSearchBtn} ${
+        canToggle ? '' : styles.invisible
+      }`}
       aria-label="Search By Center Store or Location"
-      {...attributes}
     >
       <Icon
         width={23}
@@ -212,19 +218,29 @@ const HeaderSearchButton = ({
   );
 };
 
+HeaderSearchButton.propTypes = {
+  toggleSearch: PropTypes.func.isRequired,
+  searchOpen: PropTypes.bool.isRequired,
+  canToggle: PropTypes.bool.isRequired
+};
+
+// Admin Header
+// Shown only when an admin is logged into the CMS
+// Constant set of links used temp. Basically another header with no mobile nav / search capabilities
 const AdminHeader = () => {
-  const navLinks = [
+  const NAV_LINKS = [
     { text: 'HOME', href: 'https://www.simon.com' },
     { text: 'PROFILE', href: 'https://www.simon.com' },
     { text: 'CHANGE PASSWORD', href: 'https://www.simon.com' },
     { text: 'LOGOUT', href: 'https://www.simon.com' }
   ];
+
   return (
     <div className={styles.adminHeader}>
       <div className="container">
         <div className={styles.headerContent}>
-          <HeaderLogo logo={AdminLogo} fill={'#000'} />
-          <HeaderNav links={navLinks} />
+          <HeaderLogo Logo={AdminLogo} fill={'#000'} />
+          <HeaderNav links={NAV_LINKS} />
         </div>
       </div>
     </div>
@@ -255,6 +271,12 @@ class Header extends Component {
     this.toggleSearch = this.toggleSearch.bind(this);
     this.toggleNav = this.toggleNav.bind(this);
   }
+
+  static defaultProps = {
+    searchSettings: { include: true, toggle: true },
+    adminLoggedIn: false,
+    theme: { logo: SimonLogo, links: [], search: {} }
+  };
 
   static getDerivedStateFromProps(nextProps) {
     // if the search can toggle, close the search otherwise open it
@@ -293,28 +315,26 @@ class Header extends Component {
 
   render() {
     const { navOpen, searchOpen } = this.state;
-    const {
-      searchSettings,
-      user,
-      theme = { logo: SimonLogo, links: [], search: {} }
-    } = this.props;
-    const adminLoggedIn = user.status === 'LOGGED_IN';
+    const { searchSettings, adminLoggedIn, theme } = this.props;
 
     return (
       <header className={styles.header}>
         {adminLoggedIn && <AdminHeader />}
         <div className="container">
           <div className={styles.headerContent}>
-            <HeaderNavButton
+            <button
+              aria-label="Toggle Site Navigation"
+              className={`${styles.headerNavBtn} ${navOpen ? styles.open : ''}`}
               onClick={this.toggleNav}
               onFocus={() => {
                 if (ask() === 'keyboard') {
                   this.toggleNav();
                 }
               }}
-              navOpen={navOpen}
-            />
-            <HeaderLogo logo={theme.logo} />
+            >
+              <span className={styles.headerNavBtnIcon} />
+            </button>
+            <HeaderLogo Logo={theme.logo} />
             <HeaderNav
               links={theme.links}
               navOpen={navOpen}
@@ -323,10 +343,9 @@ class Header extends Component {
             />
             {searchSettings.include && (
               <HeaderSearchButton
-                onClick={this.toggleSearch}
+                toggleSearch={this.toggleSearch}
                 searchOpen={searchOpen}
-                onFocus={searchOpen ? undefined : this.toggleSearch}
-                className={searchSettings.toggle ? '' : styles.invisible}
+                canToggle={searchSettings.toggle}
               />
             )}
           </div>
@@ -353,7 +372,9 @@ class Header extends Component {
 }
 
 Header.propTypes = {
-  theme: PropTypes.object.isRequired
+  theme: PropTypes.object.isRequired,
+  searchSettings: PropTypes.object.isRequired,
+  adminLoggedIn: PropTypes.bool.isRequired
 };
 
-export default connect(mapStateToProps)(Header);
+export default Header;

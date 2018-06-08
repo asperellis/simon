@@ -24,10 +24,17 @@ class Dropdown extends PureComponent {
     this.toggleDropdown = this.toggleDropdown.bind(this);
   }
 
+  static defaultProps = {
+    text: 'EXPAND',
+    buttonClasses: '',
+    dropOnHover: false,
+    direction: 'left'
+  };
+
   // click event of the button
   toggleDropdown() {
     this.setState(prevState => ({
-      dropdownOpen: prevState.dropdownOpen
+      dropdownOpen: !prevState.dropdownOpen
     }));
   }
 
@@ -59,11 +66,11 @@ class Dropdown extends PureComponent {
 
   render() {
     const {
-      text = 'Expand',
-      dropOnHover = false,
+      text,
+      dropOnHover,
       children,
-      buttonClasses = '',
-      direction = 'left'
+      buttonClasses,
+      direction
     } = this.props;
 
     // dropdown is open if the mouse/focus is on the button or the dropdown contents or if the user has clicked the button to open it

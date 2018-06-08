@@ -88,7 +88,7 @@ const FooterLegal = () => {
   FooterSocialAndSearch: Social Icons for the theme along with a link to search
   FooterLegal: Legal text and links
 */
-const Footer = ({ theme = { banner: {}, links: [] } }) => {
+const Footer = ({ theme }) => {
   return (
     <footer className={styles.footer}>
       <a href={theme.banner.href} className={`${styles.footerBannerLink} bold`}>
@@ -96,7 +96,7 @@ const Footer = ({ theme = { banner: {}, links: [] } }) => {
       </a>
       <div className="container">
         <FooterSocialAndSearch socialNetworks={theme.socialNetworks} />
-        <FooterLinks links={theme.links} />
+        {theme.links.length > 0 && <FooterLinks links={theme.links} />}
         <FooterLegal />
       </div>
     </footer>
@@ -105,6 +105,17 @@ const Footer = ({ theme = { banner: {}, links: [] } }) => {
 
 Footer.propTypes = {
   theme: PropTypes.object.isRequired
+};
+
+Footer.defaultProps = {
+  theme: {
+    banner: {
+      text: 'BECOME A MALL INSIDER. JOIN TODAY',
+      href: 'https://www.simon.com/mall-insider'
+    },
+    links: [],
+    socialNetworks: null
+  }
 };
 
 export default Footer;

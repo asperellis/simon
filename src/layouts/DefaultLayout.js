@@ -254,7 +254,11 @@ class DefaultLayout extends Component {
             <a href={`#${MAIN_CONTENT_ID}`} className={styles.skipToContent}>
               Skip To Content
             </a>
-            <Header theme={theme.header} />
+            <Header
+              theme={theme.header}
+              searchSettings={searchSettings}
+              adminLoggedIn={user.status === 'LOGGED_IN'}
+            />
             {!hasSeenCookieMessage && <CookieBanner />}
             <main className={mainClass} id={MAIN_CONTENT_ID} tabIndex="-1">
               {this.props.children}
