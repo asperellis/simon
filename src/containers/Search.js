@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { setSearchToggle, getUserLocation } from './../actions/App';
+import { getUserLocation } from './../actions/User';
+import { setSearchToggle } from './../actions/UI';
 
 const mapDispatchToProps = dispatch => {
   return {

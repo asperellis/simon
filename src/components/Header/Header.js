@@ -10,7 +10,7 @@ import CloseIcon from './../../images/icons/close.svg';
 import SimonLogo from './../../images/logos/simon.svg';
 import AdminLogo from './../../images/logos/simon-central.svg';
 import PropTypes from 'prop-types';
-import { docCookies } from './../../utils/utils';
+import { docCookies } from './../../utils/docCookies';
 
 // Dropdown Button in the global header for Premium Outlets Only
 // Contains login form for user to login to VIP Club
@@ -300,7 +300,7 @@ class Header extends Component {
   toggleNav() {
     this.setState(
       prevState => ({
-        searchOpen: this.props.searchSettings.toggle ? true : false,
+        searchOpen: this.props.searchSettings.toggle ? false : true,
         navOpen: !prevState.navOpen
       }),
       () => {
@@ -315,7 +315,13 @@ class Header extends Component {
 
   render() {
     const { navOpen, searchOpen } = this.state;
-    const { searchSettings, adminLoggedIn, theme } = this.props;
+    const {
+      searchSettings,
+      adminLoggedIn,
+      theme,
+      userLocation,
+      getUserLocation
+    } = this.props;
 
     return (
       <header className={styles.header}>
@@ -355,6 +361,8 @@ class Header extends Component {
             canToggle={searchSettings.toggle}
             quickLinks={theme.search.quickLinks}
             toggleSearch={this.toggleSearch}
+            userLocation={userLocation}
+            getUserLocation={getUserLocation}
           />
         </FadeInDown>
         {navOpen && (

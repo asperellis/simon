@@ -80,7 +80,7 @@ class Dropdown extends PureComponent {
       this.state.dropdownOpen;
 
     // events that update the state of the dropdown being open or closed
-    const userEvents = {
+    const trackedEvents = {
       onMouseEnter: dropOnHover ? this.enterMenu : undefined,
       onMouseLeave: dropOnHover ? this.leaveMenu : undefined,
       onFocus: dropOnHover ? this.enterMenu : undefined,
@@ -92,14 +92,14 @@ class Dropdown extends PureComponent {
         <button
           className={`${styles.dropdownToggle} ${buttonClasses}`}
           onClick={dropOnHover ? undefined : this.toggleDropdown}
-          {...userEvents}
+          {...trackedEvents}
         >
           {text}
         </button>
         <ExpandDown in={isOpen}>
           <div
             className={`${styles.dropdownContent} ${styles[direction]}`}
-            {...userEvents}
+            {...trackedEvents}
           >
             {children}
           </div>

@@ -1,14 +1,22 @@
+// API Utility
 const API = {
+  // header search autocomplete method
+  // takes in a partial query and returns search suggestions
   getSearchSuggestions: query => {
+    // based on the type of result you can route to different locations
     const getSearchUrl = (type, text) => {
       let url = '';
+      // based on the type of suggestion - mall, tenant or other
       switch (type.toLowerCase()) {
+        // go to the mall page
         case 'mall':
           url = `/mall/${text.replace(/ /g, '-').toLowerCase()}`;
           break;
+        // go to the brand page - similar to search results but only properties that show the brand
         case 'tenant':
           url = `/brand/${text.replace(/ /g, '-').toLowerCase()}`;
           break;
+        // no matches so show search results
         default:
           url = `/search/${encodeURIComponent(
             text.replace(/ /g, '-').toLowerCase()
@@ -25,6 +33,8 @@ const API = {
       .then(response => response.json())
       .then(data =>
         data.map(suggestion => {
+          // mapping to have better property names and routes included
+          // this should be on the api but temp here
           return {
             text: suggestion.Item1,
             type: suggestion.Item2,

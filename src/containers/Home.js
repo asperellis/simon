@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { logInUser, logOutUser, setSearchToggle } from './../actions/App';
+import { logInUser, logOutUser } from './../actions/User';
+import { setSearchToggle } from './../actions/UI';
 
 const mapStateToProps = state => {
   return {

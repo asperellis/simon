@@ -1,227 +1,28 @@
 import React, { Component } from 'react';
-import styles from './DefaultLayout.css';
-import {
-  default as Header,
-  HeaderNavVipDropdown
-} from './../components/Header/Header';
-import Footer from './../components/Footer/Footer';
-import SimonLogo from './../images/logos/simon.svg';
-import PremiumOutletsLogo from './../images/logos/premium-outlets.svg';
-import GiftcardLogo from './../images/logos/giftcard.svg';
-import CookieBanner from './../components/CookieBanner/CookieBanner';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { docCookies } from './../utils/utils';
+import { getUserLocation } from './../actions/User';
 
-// links in the header - default
-const HEADER_LINKS = [
-  { text: 'SHOPPERS', href: 'https://www.simon.com' },
-  { text: 'BUSINESS', href: 'https://www.simon.com' },
-  { text: 'INVESTORS', href: 'https://www.simon.com' },
-  { text: 'CAREERS', href: 'https://www.simon.com' },
-  { text: 'CONTACT', href: 'https://www.simon.com' }
-];
+// THEMES
+import { THEMES } from './Themes';
 
-const HEADER_SEARCH_QUICK_LINKS = [
-  {
-    href: 'https://www.simon.com/mall',
-    text: 'See All Properties'
-  },
-  {
-    href: 'https://www.simon.com/mall-insider',
-    text: 'Mall Insider'
-  },
-  {
-    href: 'https://www.premiumoutlets.com/vip',
-    text: 'VIP Club'
-  },
-  {
-    href: 'http://www.simon.com/brands',
-    text: 'Brands'
-  },
-  {
-    href: 'https://www.simon.com/giftcard',
-    text: 'Simon Giftcard®'
-  },
-  {
-    href: 'https://www.simon.com/travel',
-    text: 'Travel & Tourism'
-  }
-];
+// COMPONENTS
+import { default as Header } from './../components/Header/Header';
+import Footer from './../components/Footer/Footer';
+import CookieBanner from './../components/CookieBanner/CookieBanner';
 
-const FOOTER_LINKS = [
-  {
-    name: 'Learn More',
-    links: [
-      { href: 'http://business.simon.com/about', text: 'About Simon' },
-      { href: 'http://www.simon.com/mall', text: 'See All Properties' },
-      { href: 'https://www.simon.com/travel', text: 'Travel & Tourism' },
-      { href: 'http://www.simon.com/brands', text: 'Brands' }
-    ]
-  },
-  {
-    name: 'More From Simon',
-    links: [
-      { href: 'http://www.simon.com/foundatsimon', text: '#foundatsimon' },
-      { href: 'https://said.simon.com/', text: 'Simon SAID' },
-      { href: 'https://family.simon.com/', text: 'Family at Simon' },
-      { href: 'http://syf.org/', text: 'Simon Youth Foundation' }
-    ]
-  },
-  {
-    name: 'Simon Giftcards®',
-    links: [
-      {
-        href: 'https://www.simon.com/giftcard/',
-        text: 'Purchase a Giftcard'
-      },
-      {
-        href: 'https://www.simon.com/giftcard/account_register.aspx',
-        text: 'Register Your Card'
-      },
-      {
-        href: 'https://www.simon.com/giftcard/card_balance.aspx',
-        text: 'Check Your Balance'
-      },
-      { href: 'https://www.simon.com/volume/', text: 'Corporate Sales' }
-    ]
-  },
-  {
-    name: 'Business Opportunities',
-    links: [
-      { href: 'http://business.simon.com/advertising', text: 'Advertising' },
-      { href: 'https://business.simon.com/leasing', text: 'Leasing' },
-      {
-        href: 'http://business.simon.com/property-services',
-        text: 'Property Services'
-      },
-      {
-        href: 'http://business.simon.com/retailer-marketing',
-        text: 'Retailer Marketing'
-      }
-    ]
-  }
-];
+// UTILS
+import 'what-input'; // tracks users input methods for a11y things
+import { docCookies } from './../utils/docCookies';
+import loadFonts from './../utils/loadFonts';
 
-const THEMES = {
-  simon: {
-    header: {
-      links: HEADER_LINKS,
-      logo: SimonLogo,
-      search: {
-        quickLinks: HEADER_SEARCH_QUICK_LINKS
-        // could also add autocomplete url here
-      }
-    },
-    footer: {
-      banner: {
-        text: 'BECOME A MALL INSIDER. JOIN TODAY',
-        href: 'https://www.simon.com/mall-insider'
-      },
-      socialNetworks: {
-        facebook: 'https://www.facebook.com',
-        twitter: 'https://www.twitter.com',
-        youtube: 'https://www.youtube.com',
-        simon: 'https://www.simon.com',
-        instagram: 'https://www.instagram.com'
-      },
-      links: FOOTER_LINKS
-    }
-  },
-  premiumOutlets: {
-    header: {
-      links: [...HEADER_LINKS, HeaderNavVipDropdown],
-      logo: PremiumOutletsLogo,
-      search: {
-        quickLinks: [
-          ...HEADER_SEARCH_QUICK_LINKS.slice(0, 4),
-          {
-            href: 'http://www.simon.com/brands',
-            text: 'PO Specific Quick Link'
-          }
-        ]
-        // could also add autocomplete url here
-      }
-    },
-    footer: {
-      banner: {
-        text: 'JOIN THE VIP CLUB TODAY',
-        href: 'https://www.premiumoutlets.com/vip/register'
-      },
-      socialNetworks: {
-        facebook: 'https://www.facebook.com',
-        twitter: 'https://www.twitter.com',
-        youtube: 'https://www.youtube.com',
-        simon: 'https://www.simon.com',
-        instagram: 'https://www.instagram.com'
-      },
-      links: [
-        ...FOOTER_LINKS.filter(
-          group => group.name !== 'Business Opportunities'
-        ),
-        {
-          name: 'Premium Outlets International',
-          links: [
-            {
-              href: 'http://www.premiumoutlets.com/german/',
-              text: 'Deutsch'
-            },
-            {
-              href: 'http://www.premiumoutlets.com/spanish/',
-              text: 'Español'
-            },
-            {
-              href: 'http://www.premiumoutlets.com/french/',
-              text: 'Français'
-            },
-            {
-              href: 'http://www.premiumoutlets.com/portuguese/',
-              text: 'Portugués'
-            },
-            {
-              href: 'http://www.premiumoutlets.com/chinese/',
-              text: '中文'
-            },
-            {
-              href: 'http://www.premiumoutlets.com/korean/',
-              text: '한국어'
-            },
-            {
-              href: 'http://www.premiumoutlets.com/japanese/',
-              text: '日本語'
-            }
-          ],
-          wrap: true
-        }
-      ]
-    }
-  },
-  giftcard: {
-    header: {
-      links: HEADER_LINKS,
-      logo: GiftcardLogo,
-      search: {
-        quickLinks: HEADER_SEARCH_QUICK_LINKS
-        // could also add autocomplete url here
-      }
-    },
-    footer: {
-      banner: {
-        text: 'CHECK YOUR CARD BALANCE',
-        href: 'https://www.simon.com/giftcard/card_balance.aspx'
-      },
-      socialNetworks: {
-        facebook: 'https://www.facebook.com',
-        twitter: 'https://www.twitter.com',
-        youtube: 'https://www.youtube.com',
-        simon: 'https://www.simon.com',
-        instagram: 'https://www.instagram.com'
-      },
-      links: FOOTER_LINKS
-    }
-  }
-};
+// APP STYLES - bootstrap out of the box for grid - maybe temporary
+import '!style-loader!css-loader!bootstrap/dist/css/bootstrap-reboot.min.css';
+import '!style-loader!css-loader!bootstrap/dist/css/bootstrap-grid.min.css';
+import './../styles/index.css'; // should we merge this and the next file?
+import styles from './DefaultLayout.css';
 
+// get user info and search settings to pass to the header
 const mapStateToProps = state => {
   return {
     user: state.user,
@@ -229,35 +30,63 @@ const mapStateToProps = state => {
   };
 };
 
+// get user location method
+const mapDispatchToProps = dispatch => {
+  return {
+    getUserLocation: () => dispatch(getUserLocation())
+  };
+};
+
+// Default Layout
+// Takes children and wraps them in a themed layout with a header and footer
+// All other app level content should be included here as well
 class DefaultLayout extends Component {
   constructor(props) {
     super(props);
 
+    // currently setting theme manually. this will need to change
     this.state = {
       theme: 'premiumOutlets'
     };
   }
 
+  componentDidMount() {
+    // our font loading strategy using fontfaceobserver
+    loadFonts();
+  }
+
   render() {
+    // the layout theme defined in a separate json file
     const theme = THEMES[this.state.theme];
+    // from the app store
     const { user, searchSettings } = this.props;
+    // a layout can currently have at most 3 bars of content in the header
+    // admin header + site header + search bar open; each is 74px high
+    // contentPad is the count of these items and
+    // pads page content down by x * 74px through css
     const contentPad =
       1 + (user.status === 'LOGGED_IN') + !searchSettings.toggle;
-    const hasSeenCookieMessage = docCookies.getItem('seen_cookie_message');
+    // css class to pad page content down
     const mainClass = styles[`contentPad${contentPad}`];
+    // has the user seen the policy banner
+    const hasSeenCookieMessage = docCookies.getItem('seen_cookie_message');
+    // id ref of the page content inside the layout
     const MAIN_CONTENT_ID = 'site-content';
 
+    // if no theme show only the page content
     return (
       <div>
         {theme ? (
           <div>
             <a href={`#${MAIN_CONTENT_ID}`} className={styles.skipToContent}>
-              Skip To Content
+              {'Skip To Content'}
             </a>
             <Header
               theme={theme.header}
               searchSettings={searchSettings}
               adminLoggedIn={user.status === 'LOGGED_IN'}
+              userLocation={user.location}
+              getUserLocation={this.props.getUserLocation}
             />
             {!hasSeenCookieMessage && <CookieBanner />}
             <main className={mainClass} id={MAIN_CONTENT_ID} tabIndex="-1">
@@ -273,4 +102,6 @@ class DefaultLayout extends Component {
   }
 }
 
-export default withRouter(connect(mapStateToProps)(DefaultLayout));
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(DefaultLayout)
+);

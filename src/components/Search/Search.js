@@ -1,147 +1,154 @@
 import React, { Component } from 'react';
-import styles from './Search.css';
+import { Link, withRouter } from 'react-router-dom';
+import { ask } from 'what-input';
+import { debounce } from './../../utils/utils';
+import PropTypes from 'prop-types';
+import API from './../../api/api';
 import SearchIcon from './../../images/icons/search.svg';
 import NavIcon from './../../images/icons/nav.svg';
 import FadeInRight from './../Animations/FadeInRight';
 import ExpandDown from './../Animations/ExpandDown';
-import API from './../../api/api';
-import { connect } from 'react-redux';
-import { getUserLocation } from './../../actions/App';
-import { Link } from 'react-router-dom';
-import { ask } from 'what-input';
-import { debounce } from './../../utils/utils';
-import { withRouter } from 'react-router-dom';
+import styles from './Search.css';
 
-const mapDispatchToProps = dispatch => {
-  return {
-    getUserLocation: () => dispatch(getUserLocation())
-  };
-};
+/*
+  HeaderSearchForm Component
+  Form with search input and button to perform global searches across the site
 
-const mapStateToProps = state => {
-  return {
-    user: state.user
-  };
-};
-
-const HeaderSearchButton = ({ onClick, ...attributes }) => {
+  Props
+  performSearch: the searching method to search attached to the submit of the form
+  updateQuery: updates the parents query state
+  query: the current parents search query set to the value of the input
+  handleKeyDown: keydown method for the search input watching for up, down to move autocomplete cursor state or enter key for searching
+  showSuggestions: method that takes a boolean value to show search suggestions or not
+  autoFocus: boolean determining autoFocus prop of the input
+  inputRef: ref for parent component
+  style: object from animation component
+*/
+const HeaderSearchForm = ({
+  performSearch = undefined,
+  updateQuery = undefined,
+  query = '',
+  handleKeyDown = undefined,
+  showSuggestions = undefined,
+  autoFocus = false,
+  inputRef = undefined,
+  style = {}
+}) => {
   return (
-    <button
-      onClick={onClick}
-      className={styles.headerSearchBtn}
-      {...attributes}
+    <form
+      role="search"
+      onSubmit={performSearch}
+      className={styles.headerSearchForm}
+      style={style}
     >
-      <SearchIcon
-        width={23}
-        height={23}
-        fill={'#fff'}
-        viewBox={'0 0 23 23'}
-        className={styles.headerSearchIcon}
+      <button
+        type="submit"
+        aria-label="Search"
+        className={styles.headerSearchBtn}
+      >
+        <SearchIcon
+          width={23}
+          height={23}
+          fill={'#fff'}
+          viewBox={'0 0 23 23'}
+          className={styles.headerSearchIcon}
+        />
+      </button>
+      {!query && (
+        <label htmlFor="headerSearchInput" className={styles.headerSearchLabel}>
+          {'Search by center, store or location'}
+        </label>
+      )}
+      <input
+        type="search"
+        name="headerSearchInput"
+        id="headerSearchInput"
+        autoFocus={autoFocus}
+        className={styles.headerSearchInput}
+        value={query}
+        ref={inputRef}
+        onKeyDown={handleKeyDown}
+        onFocus={() => {
+          showSuggestions(true);
+        }}
+        onBlur={() => {
+          showSuggestions(query.length > 0);
+        }}
+        onChange={updateQuery}
+        aria-label="Search by center, store or location"
+        autoComplete="off"
       />
-    </button>
+    </form>
   );
 };
 
-class HeaderSearchForm extends Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    const {
-      performSearch,
-      updateQuery,
-      query,
-      handleKeyDown,
-      showSuggestions,
-      autoFocus,
-      inputRef,
-      ...attributes
-    } = this.props;
-    return (
-      <form
-        role="search"
-        onSubmit={performSearch}
-        className={styles.headerSearchForm}
-        {...attributes}
-      >
-        <HeaderSearchButton
-          onClick={performSearch}
-          type="submit"
-          aria-label="Search"
-        />
-        {!query && (
-          <label
-            htmlFor="headerSearchInput"
-            className={styles.headerSearchLabel}
-          >
-            {'Search by center, store or location'}
-          </label>
-        )}
-        <input
-          type="search"
-          autoFocus={autoFocus}
-          className={styles.headerSearchInput}
-          name="headerSearchInput"
-          id="headerSearchInput"
-          value={query}
-          ref={inputRef}
-          onKeyDown={handleKeyDown}
-          onFocus={() => {
-            showSuggestions(true);
-          }}
-          onBlur={() => {
-            showSuggestions(query.length > 0);
-          }}
-          onChange={updateQuery}
-          aria-label="Search by center, store or location"
-          autoComplete="off"
-        />
-      </form>
-    );
-  }
-}
+HeaderSearchForm.propTypes = {
+  performSearch: PropTypes.func,
+  updateQuery: PropTypes.func,
+  query: PropTypes.string,
+  handleKeyDown: PropTypes.func,
+  showSuggestions: PropTypes.func,
+  autoFocus: PropTypes.bool,
+  inputRef: PropTypes.object
+};
 
+/*
+  HeaderSearchSuggestions Component
+  Shows quick links or autocomplete suggestions based on the query state of parent component
+
+  Props
+  suggestions: array of autocomplete suggestions from parent component
+  showSuggestions: method to set whether or not to show suggestions based on passing a bool param
+  cursor: index of the suggestions array user is on based on keyboard navigation
+  quickLinks: array from theme of links to show when there are no autocomplete suggestions
+  status: string from ExpandDown Animation component of that animations status
+  style: object of styles from ExpandDown Animation component
+*/
 const HeaderSearchSuggestions = ({
-  suggestions,
-  status,
-  showSuggestions,
-  cursor,
-  quickLinks,
-  ...attributes
+  suggestions = null,
+  showSuggestions = undefined,
+  cursor = 0,
+  quickLinks = null,
+  status = '',
+  style = {}
 }) => {
+  // if we have autocomplete suggestions use them, else use quick links from the theme and if neither do nothing
   const links = suggestions || quickLinks || [];
+  // Text displayed next to the outputted links
+  let suggestionHeaderText = '';
+  if (suggestions) {
+    suggestionHeaderText = 'Suggested Results';
+  } else if (quickLinks && quickLinks.length > 0) {
+    suggestionHeaderText = 'Quick Links';
+  }
 
   return (
     <div
-      className={[
-        styles.headerSearchSuggestions,
-        status === 'entered' && styles.show
-      ].join(' ')}
-      {...attributes}
+      className={`${styles.headerSearchSuggestions} ${
+        status === 'entered' ? styles.show : ''
+      } ${links.length <= 0 ? styles.hide : ''}`}
+      style={style}
     >
       <div className="container">
         <div className={styles.headerSearchSuggestionsContent}>
           <div className={styles.headerSearchQuickLinksHeader}>
-            {suggestions || (!quickLinks || !quickLinks.length)
-              ? 'Suggested Results'
-              : 'Quick Links'}
+            {suggestionHeaderText}
           </div>
           <div
-            className={
+            className={`${
               suggestions
                 ? styles.headerSearchSuggestionsList
                 : styles.headerSearchQuickLinks
-            }
+            }`}
           >
             {links.map((item, id) => (
               <Link
                 to={item.href}
-                className={[
+                className={`${
                   suggestions
                     ? styles.headerSearchSuggestionsLink
-                    : styles.headerSearchQuickLink,
-                  `${cursor === id + 1 && suggestions ? styles.active : ''}`
-                ].join(' ')}
+                    : styles.headerSearchQuickLink
+                } ${cursor === id + 1 && suggestions ? styles.active : ''}`}
                 key={item.text + id}
                 onClick={() => {
                   showSuggestions(false);
@@ -156,6 +163,34 @@ const HeaderSearchSuggestions = ({
     </div>
   );
 };
+
+HeaderSearchSuggestions.propTypes = {
+  suggestions: PropTypes.array,
+  cursor: PropTypes.number,
+  quickLinks: PropTypes.array,
+  status: PropTypes.string,
+  showSuggestions: PropTypes.func,
+  style: PropTypes.object
+};
+
+/*
+  Search Component
+  For search bar attached to the header element. A global search included on most site pages
+
+  Props
+  canToggle: bool if the search can toggle. it will always be open if not
+  quickLinks: array of links from theme
+  toggleSearch: method to toggle the searchOpen state of parent Header Component
+  userLocation: redux store value of the user location
+  getUserLocation: method to get the user location and store in redux store
+
+  State
+  query: the search query being typed by the user
+  querySuggestions: array of autocomplete suggestions from the API search call
+  showSuggestions: bool to show search suggestions or not
+  mounted: is the component mounted? for animation in props
+  cursor: state of autocomplete cursor when navigating by arrow keys
+*/
 
 class Search extends Component {
   constructor(props) {
@@ -176,13 +211,18 @@ class Search extends Component {
     this.handleKeyDown = this.handleKeyDown.bind(this);
   }
 
+  // default props
+  static defaultProps = {
+    canToggle: true,
+    quickLinks: [],
+    toggleSearch: undefined,
+    userLocation: {},
+    getUserLocation: undefined
+  };
+
   // for animations
   componentDidMount() {
     this.setState({ mounted: !this.state.mounted });
-  }
-
-  componentWillUnmount() {
-    // TODO stop this.getSearchSuggestions();
   }
 
   // takes a boolean to show suggestions or not for search
@@ -243,6 +283,7 @@ class Search extends Component {
   }
 
   // calls autocomplete api to get search suggestions with a debounce
+  // TODO: should a component call the api like this?
   getSearchSuggestions = debounce(() => {
     if (this.state.query.length > 2) {
       API.getSearchSuggestions(this.state.query).then(data => {
@@ -281,14 +322,20 @@ class Search extends Component {
   }
 
   render() {
+    const {
+      style,
+      canToggle,
+      userLocation,
+      history,
+      quickLinks,
+      getUserLocation
+    } = this.props;
+
     return (
       <div
-        className={[
-          styles.headerSearch,
-          'light',
-          this.state.showSuggestions && styles.darken
-        ].join(' ')}
-        style={this.props.style}
+        className={`${styles.headerSearch} ${this.state.showSuggestions &&
+          styles.darken} light`}
+        style={style}
         role="search"
       >
         <div className="container">
@@ -300,25 +347,23 @@ class Search extends Component {
                 showSuggestions={this.showSuggestions}
                 handleKeyDown={this.handleKeyDown}
                 query={this.state.query}
-                autoFocus={this.props.canToggle && ask() === 'mouse'}
+                autoFocus={canToggle && ask() === 'mouse'}
                 inputRef={this.searchInput}
               />
             </FadeInRight>
-            {this.props.user.location && (
+            {userLocation && (
               <button
                 type="button"
                 onClick={() => {
-                  this.props.getUserLocation();
+                  getUserLocation();
                   this.setState({
                     query: '',
                     querySuggestions: null,
                     showSuggestions: false
                   });
-                  this.props.history.push('/search/your-location');
+                  history.push('/search/your-location');
                 }}
-                className={[styles.headerSearchFindNearbyButton, 'light'].join(
-                  ' '
-                )}
+                className={`${styles.headerSearchFindNearbyButton} light`}
               >
                 <NavIcon
                   width={20}
@@ -334,7 +379,7 @@ class Search extends Component {
         </div>
         <ExpandDown in={this.state.showSuggestions} duration={300} delay={0}>
           <HeaderSearchSuggestions
-            quickLinks={this.props.quickLinks}
+            quickLinks={quickLinks}
             suggestions={this.state.querySuggestions}
             cursor={this.state.cursor}
             showSuggestions={this.showSuggestions}
@@ -345,4 +390,12 @@ class Search extends Component {
   }
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Search));
+HeaderSearchSuggestions.propTypes = {
+  canToggle: PropTypes.bool,
+  quickLinks: PropTypes.array,
+  toggleSearch: PropTypes.func,
+  userLocation: PropTypes.object,
+  getUserLocation: PropTypes.func
+};
+
+export default withRouter(Search);

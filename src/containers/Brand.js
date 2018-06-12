@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { getUserLocation } from './../actions/App';
+import { getUserLocation } from './../actions/User';
 
 const mapDispatchToProps = dispatch => {
   return {

@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './CookieBanner.css';
-import { docCookies } from './../../utils/utils';
+import { docCookies } from './../../utils/docCookies';
 
 // Cookie Banner Notificaton
 // Shows Cookie message for legal information to users who havent seen it

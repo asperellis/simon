@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import styles from './SocialIcons.css';
 import FacebookIcon from './../../images/icons/facebook.svg';
 import InstagramIcon from './../../images/icons/instagram.svg';
@@ -9,13 +10,16 @@ import SimonIcon from './../../images/icons/simon.svg';
 import YouTubeIcon from './../../images/icons/youtube.svg';
 import EmailIcon from './../../images/icons/email.svg';
 
+// Social Icons Component
+// Takes in a set of props in the format networkname=url along with size and fill for the icons
+// Currently only supports displaying in a horizontal format
 const SocialIcons = ({
   width = 25,
   height = 25,
   fill = '#000',
-  className,
   ...networks
 }) => {
+  // manual map to all icons. not sure this is the best way but it works
   const icons = {
     facebook: FacebookIcon,
     twitter: TwitterIcon,
@@ -26,21 +30,23 @@ const SocialIcons = ({
     email: EmailIcon
   };
 
+  // for each network passed as a prop if theres a matching icon
+  // output a link to that networks url wrapped around the icon
   return (
-    <div className={[styles.socialIcons, className].join(' ')}>
-      {Object.keys(networks).map(network => {
-        if (!icons[network]) {
+    <div className={styles.socialIcons}>
+      {Object.keys(networks).map(networkName => {
+        if (!icons[networkName]) {
           return false;
         }
 
-        const Icon = icons[network];
+        const Icon = icons[networkName];
+        const networkUrl = networks[networkName];
+
         return (
-          <button
-            aria-label={network}
-            onClick={() => {
-              document.location.href = networks[network];
-            }}
-            key={network}
+          <Link
+            to={networkUrl}
+            key={networkName}
+            aria-label={networkName}
             className={styles.socialIconLink}
           >
             <Icon
@@ -50,7 +56,7 @@ const SocialIcons = ({
               viewBox={'0 0 ' + width + ' ' + height}
               className={styles.socialIcon}
             />
-          </button>
+          </Link>
         );
       })}
     </div>
@@ -58,8 +64,8 @@ const SocialIcons = ({
 };
 
 SocialIcons.propTypes = {
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
+  width: PropTypes.number,
+  height: PropTypes.number,
   fill: PropTypes.string,
   facebook: PropTypes.string,
   twitter: PropTypes.string,

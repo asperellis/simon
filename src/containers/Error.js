@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { setSearchToggle } from './../actions/App';
+import { setSearchToggle } from './../actions/UI';
 
 const mapDispatchToProps = dispatch => {
   return {
