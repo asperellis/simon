@@ -119,7 +119,7 @@ const FOOTER_LINKS = [
 ];
 
 // Default Social Links
-const SIMON_SOCIAL_NETWORKS = {
+export const SIMON_SOCIAL_NETWORKS = {
   facebook: 'https://www.facebook.com',
   twitter: 'https://www.twitter.com',
   youtube: 'https://www.youtube.com',

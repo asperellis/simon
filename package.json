@@ -23,6 +23,8 @@
     "case-sensitive-paths-webpack-plugin": "^2.1.1",
     "chalk": "^2.3.0",
     "css-loader": "^0.28.8",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
     "eslint": "^4.15.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-config-react-app": "^2.0.1",
@@ -37,6 +39,7 @@
     "fontfaceobserver": "^2.0.13",
     "html-webpack-plugin": "^2.30.1",
     "jest": "^22.4.3",
+    "jest-enzyme": "^6.0.1",
     "object-assign": "^4.1.1",
     "postcss-cssnext": "^3.0.2",
     "postcss-loader": "^2.0.10",
@@ -45,6 +48,7 @@
     "promise": "^8.0.1",
     "prop-types": "^15.6.1",
     "react": "^16.3.2",
+    "react-addons-test-utils": "^15.6.2",
     "react-dev-utils": "^4.2.1",
     "react-dom": "^16.3.2",
     "react-redux": "^5.0.7",
@@ -67,20 +71,15 @@
     "whatwg-fetch": "^2.0.3"
   },
   "babel": {
-    "presets": [
-      "react-app"
-    ]
+    "presets": ["react-app"]
   },
   "eslintConfig": {
     "extends": "react-app"
   },
   "jest": {
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx}"
-    ],
-    "setupFiles": [
-      "<rootDir>/config/polyfills.js"
-    ],
+    "setupTestFrameworkScriptFile": "./config/jest/enzyme.js",
+    "collectCoverageFrom": ["src/**/*.{js,jsx}"],
+    "setupFiles": ["<rootDir>/config/polyfills.js"],
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.js?(x)",
       "<rootDir>/src/**/?(*.)(spec|test).js?(x)"
@@ -92,9 +91,7 @@
       "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
       "^(?!.*\\.(js|jsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
     },
-    "transformIgnorePatterns": [
-      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"
-    ],
+    "transformIgnorePatterns": ["[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"],
     "moduleNameMapper": {
       "^react-native$": "react-native-web"
     }
