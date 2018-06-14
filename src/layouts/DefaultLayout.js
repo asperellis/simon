@@ -13,7 +13,6 @@ import CookieBanner from './../components/CookieBanner/CookieBanner';
 
 // UTILS
 import 'what-input'; // tracks users input methods for a11y things
-import { docCookies } from './../utils/docCookies';
 import loadFonts from './../utils/loadFonts';
 
 // APP STYLES - bootstrap out of the box for grid - maybe temporary
@@ -68,8 +67,6 @@ class DefaultLayout extends Component {
       1 + (user.status === 'LOGGED_IN') + !searchSettings.toggle;
     // css class to pad page content down
     const mainClass = styles[`contentPad${contentPad}`];
-    // has the user seen the policy banner
-    const hasSeenCookieMessage = docCookies.getItem('seen_cookie_message');
     // id ref of the page content inside the layout
     const MAIN_CONTENT_ID = 'site-content';
 
@@ -88,7 +85,7 @@ class DefaultLayout extends Component {
               userLocation={user.location}
               getUserLocation={this.props.getUserLocation}
             />
-            {!hasSeenCookieMessage && <CookieBanner />}
+            <CookieBanner />
             <main className={mainClass} id={MAIN_CONTENT_ID} tabIndex="-1">
               {this.props.children}
             </main>

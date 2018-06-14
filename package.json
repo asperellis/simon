@@ -38,6 +38,7 @@
     "file-loader": "^1.1.6",
     "fontfaceobserver": "^2.0.13",
     "html-webpack-plugin": "^2.30.1",
+    "identity-obj-proxy": "^3.0.0",
     "jest": "^22.4.3",
     "jest-enzyme": "^6.0.1",
     "object-assign": "^4.1.1",
@@ -93,7 +94,8 @@
     },
     "transformIgnorePatterns": ["[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"],
     "moduleNameMapper": {
-      "^react-native$": "react-native-web"
+      "^react-native$": "react-native-web",
+      "^.+\\.css$": "identity-obj-proxy"
     }
   }
 }

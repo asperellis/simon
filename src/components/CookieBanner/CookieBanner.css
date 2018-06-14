@@ -10,6 +10,11 @@
   text-align: center;
   padding: 10px 15px;
   line-height: 1;
+  display: none;
+}
+
+.cookieBanner.show {
+  display: block;
 }
 
 .cookieBanner a {

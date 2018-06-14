@@ -364,6 +364,7 @@ class Search extends Component {
                   history.push('/search/your-location');
                 }}
                 className={`${styles.headerSearchFindNearbyButton} light`}
+                aria-label="Find Nearby Centers"
               >
                 <NavIcon
                   width={20}

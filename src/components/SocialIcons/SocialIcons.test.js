@@ -20,7 +20,7 @@ describe('<SocialIcons />', () => {
   it('renders correctly', () => {
     const tree = renderer
       .create(
-        <StaticRouter>
+        <StaticRouter context={{}}>
           <SocialIcons
             width={ICON_SIZE}
             height={ICON_SIZE}

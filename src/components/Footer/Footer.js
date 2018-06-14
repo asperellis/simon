@@ -5,8 +5,26 @@ import SearchIcon from './../../images/icons/search.svg';
 import SocialIcons from './../SocialIcons/SocialIcons';
 import PropTypes from 'prop-types';
 
+// Full width bar banner for footer.
+// Displays text wrapped in a link both provided through props from theme
+const FooterBanner = ({
+  href = 'https://www.simon.com/mall-insider',
+  text = 'BECOME A MALL INSIDER. JOIN TODAY'
+}) => {
+  return (
+    <a href={href} className={`${styles.footerBannerLink} bold`}>
+      {text}
+    </a>
+  );
+};
+
+FooterBanner.propTypes = {
+  href: PropTypes.string.isRequired,
+  text: PropTypes.string.isRequired
+};
+
 // Horizontal Row of Social Icons for given theme and a Link to the Search Page
-const FooterSocialAndSearch = ({ socialNetworks }) => {
+const FooterSocialAndSearch = ({ socialNetworks = {} }) => {
   return (
     <div className={styles.footerRow}>
       {socialNetworks && (
@@ -32,6 +50,10 @@ FooterSocialAndSearch.propTypes = {
 
 // Columns of links displayed in the form of a header followed by a set of related links
 const FooterLinks = ({ links = [] }) => {
+  if (links.length === 0) {
+    return false;
+  }
+
   return (
     <div className={styles.footerLinks}>
       {links.map(linkGroup => (
@@ -65,18 +87,37 @@ FooterLinks.propTypes = {
 const FooterLegal = () => {
   return (
     <div className={styles.footerLegal}>
-      {'COPYRIGHT© 1999-2018, SIMON PROPERTY GROUP, L.P. ALL RIGHTS RESERVED.'}
-      <br />
-      {'By using this site, you agree to abide by its '}
-      <a href="http://www.simon.com/legal">{'Terms of Use'}</a>
-      {
-        ', which prohibit commercial use of any information on this site. View our '
-      }
-      <a href="http://www.simon.com/legal/privacy">{'Privacy Policy'}</a>
-      {' / '}
-      <a href="http://www.simon.com/legal/california-privacy">
-        {'Your California Privacy Rights'}
-      </a>.
+      COPYRIGHT<span className="nosup">©</span> 1999-2018, SIMON PROPERTY GROUP,
+      L.P. ALL RIGHTS RESERVED.<br />By continuing past this page and/or using
+      this site, you agree to abide by the{' '}
+      <a
+        href="http://www.simon.com/legal"
+        title="View Our Website Terms Of Use"
+      >
+        Terms of Use
+      </a>{' '}
+      for this site, which prohibit commercial use of any information on this
+      site. View our{' '}
+      <a
+        href="http://www.simon.com/legal/privacy"
+        title="Understand Our Privacy Policy"
+      >
+        Privacy Policy
+      </a>,{' '}
+      <a
+        href="http://www.simon.com/legal/cookies"
+        title="Understand Our Cookie Policy"
+      >
+        Cookie Policy
+      </a>{' '}
+      &amp; Your{' '}
+      <a
+        href="http://www.simon.com/legal/california-privacy"
+        title="Review Your California Privacy Rights"
+      >
+        California Privacy Rights
+      </a>. Simon values your privacy, manage your{' '}
+      <span className="evidon-notice-link" />
     </div>
   );
 };
@@ -88,15 +129,13 @@ const FooterLegal = () => {
   FooterSocialAndSearch: Social Icons for the theme along with a link to search
   FooterLegal: Legal text and links
 */
-const Footer = ({ theme }) => {
+const Footer = ({ theme = {} }) => {
   return (
     <footer className={styles.footer}>
-      <a href={theme.banner.href} className={`${styles.footerBannerLink} bold`}>
-        {theme.banner.text}
-      </a>
+      <FooterBanner {...theme.banner} />
       <div className="container">
         <FooterSocialAndSearch socialNetworks={theme.socialNetworks} />
-        {theme.links.length > 0 && <FooterLinks links={theme.links} />}
+        <FooterLinks links={theme.links} />
         <FooterLegal />
       </div>
     </footer>
@@ -105,17 +144,6 @@ const Footer = ({ theme }) => {
 
 Footer.propTypes = {
   theme: PropTypes.object.isRequired
-};
-
-Footer.defaultProps = {
-  theme: {
-    banner: {
-      text: 'BECOME A MALL INSIDER. JOIN TODAY',
-      href: 'https://www.simon.com/mall-insider'
-    },
-    links: [],
-    socialNetworks: null
-  }
 };
 
 export default Footer;

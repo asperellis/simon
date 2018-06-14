@@ -99,6 +99,11 @@
 
 .footerLegal a {
   text-decoration: underline;
+  color: #000;
+}
+
+.footerLegal a:hover {
+  color: #000;
 }
 
 @media (--md-viewport-up) {
