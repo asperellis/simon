@@ -98,10 +98,10 @@ const HeaderNav = ({
         }
 
         // otherwise it's a dropdown like a shopping cart or vip login
-        const DropdownButton = link;
+        const ComponentLink = link;
 
         // TODO: this doesnt work onBlur or onFocus isLastNavLink(index) && navOpen ? toggleNavOnKey : undefined
-        return <DropdownButton key={index} />;
+        return <ComponentLink key={index} />;
       })}
     </nav>
   );

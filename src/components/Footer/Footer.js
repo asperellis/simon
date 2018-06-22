@@ -87,36 +87,33 @@ FooterLinks.propTypes = {
 const FooterLegal = () => {
   return (
     <div className={styles.footerLegal}>
-      COPYRIGHT<span className="nosup">©</span> 1999-2018, SIMON PROPERTY GROUP,
-      L.P. ALL RIGHTS RESERVED.<br />By continuing past this page and/or using
-      this site, you agree to abide by the{' '}
-      <a
-        href="http://www.simon.com/legal"
-        title="View Our Website Terms Of Use"
-      >
+      {'COPYRIGHT'}
+      <span className="nosup">©</span>
+      {' 1999-2018, SIMON PROPERTY GROUP, L.P. ALL RIGHTS RESERVED.'}
+      <br />
+      {
+        'By continuing past this page and/or using this site, you agree to abide by the '
+      }
+      <Link to={'/legal'} title="Understand Our Terms of Use">
         Terms of Use
-      </a>{' '}
-      for this site, which prohibit commercial use of any information on this
-      site. View our{' '}
-      <a
-        href="http://www.simon.com/legal/privacy"
-        title="Understand Our Privacy Policy"
-      >
+      </Link>
+      {
+        ' for this site, which prohibit commercial use of any information on this site. View our '
+      }
+      <Link to={'/legal/privacy'} title="Understand Our Privacy Policy">
         Privacy Policy
-      </a>,{' '}
-      <a
-        href="http://www.simon.com/legal/cookies"
-        title="Understand Our Cookie Policy"
-      >
+      </Link>,{' '}
+      <Link to={'/legal/cookies'} title="Understand Our Cookie Policy">
         Cookie Policy
-      </a>{' '}
-      &amp; Your{' '}
-      <a
-        href="http://www.simon.com/legal/california-privacy"
+      </Link>
+      {' & Your '}
+      <Link
+        to={'/legal/california-privacy'}
         title="Review Your California Privacy Rights"
       >
         California Privacy Rights
-      </a>. Simon values your privacy, manage your{' '}
+      </Link>
+      {'. Simon values your privacy, manage your '}
       <span className="evidon-notice-link" />
     </div>
   );

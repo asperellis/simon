@@ -72,7 +72,9 @@ const HeaderSearchForm = ({
           showSuggestions(true);
         }}
         onBlur={() => {
-          showSuggestions(query.length > 0);
+          setTimeout(() => {
+            showSuggestions(query.length > 0);
+          }, 150);
         }}
         onChange={updateQuery}
         aria-label="Search by center, store or location"
