@@ -1,7 +1,77 @@
 import React, { PureComponent } from 'react';
 import styles from './Dropdown.css';
-import ExpandDown from './../Animations/ExpandDown';
+import CSSTransition from './../Animations/CSSTransition';
 import PropTypes from 'prop-types';
+
+// Dropdown Toggle Component.
+// This is the toggle to open/close dropdown content based on diff user events
+// Using an a tag if there is something to link with a hover dropdown and a button otherwise
+const DropdownToggle = ({
+  text = 'EXPAND DOWN',
+  href = '',
+  className = '',
+  dropOnHover = false,
+  overwriteEvents = undefined,
+  toggleDropdown = undefined,
+  ...trackedEvents
+}) => {
+  return (
+    <div>
+      {href && dropOnHover ? (
+        <a
+          href={href}
+          className={className}
+          onClick={overwriteEvents}
+          {...trackedEvents}
+        >
+          {text}
+        </a>
+      ) : (
+        <button
+          className={className}
+          onClick={dropOnHover ? undefined : toggleDropdown}
+          {...trackedEvents}
+        >
+          {text}
+        </button>
+      )}
+    </div>
+  );
+};
+
+DropdownToggle.propTypes = {
+  text: PropTypes.string,
+  toggleClasses: PropTypes.string,
+  dropOnHover: PropTypes.bool,
+  overwriteEvents: PropTypes.func,
+  href: PropTypes.string,
+  toggleDropdown: PropTypes.func
+};
+
+const DropdownContent = ({
+  style = {},
+  direction = 'left',
+  content = undefined,
+  status = '',
+  ...trackedEvents
+}) => {
+  return (
+    <div
+      className={`${styles.dropdownContent} ${styles[direction]}`}
+      {...trackedEvents}
+      style={style}
+    >
+      <CSSTransition
+        in={status === 'entered'}
+        duration={300}
+        delay={300}
+        cssProps={[['opacity', 0, 1]]}
+      >
+        {content}
+      </CSSTransition>
+    </div>
+  );
+};
 
 // Dropdown Component. Wrap any elements or components
 // Produces a button with supplied text and hides all children in a dropdown wrapper
@@ -20,13 +90,15 @@ class Dropdown extends PureComponent {
     this.exitDropdownTimer = null;
 
     this.toggleDropdown = this.toggleDropdown.bind(this);
+    this.overwriteEvents = this.overwriteEvents.bind(this);
   }
 
   static defaultProps = {
     text: 'EXPAND',
-    buttonClasses: '',
+    toggleClasses: '',
     dropOnHover: false,
-    direction: 'left'
+    direction: 'left',
+    href: ''
   };
 
   // click event of the button
@@ -49,13 +121,18 @@ class Dropdown extends PureComponent {
     }, 500);
   };
 
+  overwriteEvents = () => {
+    this.setState({ mouseOverDropdown: false });
+  };
+
   render() {
     const {
       text,
       dropOnHover,
       children,
-      buttonClasses,
-      direction
+      toggleClasses,
+      direction,
+      href
     } = this.props;
 
     // dropdown is open if the mouse/focus is on the button or the dropdown contents or if the user has clicked the button to open it
@@ -73,21 +150,31 @@ class Dropdown extends PureComponent {
 
     return (
       <div className={styles.dropdown}>
-        <button
-          className={`${styles.dropdownToggle} ${buttonClasses}`}
-          onClick={dropOnHover ? undefined : this.toggleDropdown}
+        <DropdownToggle
+          href={href}
+          className={`${styles.dropdownToggle} ${toggleClasses}`}
+          text={text}
+          dropOnHover={dropOnHover}
+          overwriteEvents={this.overwriteEvents}
+          toggleDropdown={this.toggleDropdown}
           {...trackedEvents}
+        />
+        <CSSTransition
+          in={isOpen}
+          duration={300}
+          delay={0}
+          cssProps={[
+            ['opacity', 0, 1],
+            ['transform', 'scaleY(0)', 'scaleY(1)'],
+            ['transformOrigin', 'center top', 'center top']
+          ]}
         >
-          {text}
-        </button>
-        <ExpandDown in={isOpen}>
-          <div
-            className={`${styles.dropdownContent} ${styles[direction]}`}
+          <DropdownContent
+            content={children}
+            direction={direction}
             {...trackedEvents}
-          >
-            {children}
-          </div>
-        </ExpandDown>
+          />
+        </CSSTransition>
       </div>
     );
   }
@@ -95,9 +182,10 @@ class Dropdown extends PureComponent {
 
 Dropdown.propTypes = {
   text: PropTypes.string.isRequired,
-  buttonClasses: PropTypes.string,
+  toggleClasses: PropTypes.string,
   dropOnHover: PropTypes.bool,
-  direction: PropTypes.string
+  direction: PropTypes.string,
+  href: PropTypes.string
 };
 
 export default Dropdown;

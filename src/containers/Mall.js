@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-
+import SEO from './../components/SEO/SEO';
 class Mall extends Component {
   render() {
     const mall = this.props.match.params.shortName;
     return (
       <div className="container">
+        <SEO url="mall" />
         {mall && (
           <div>
             <div>Weather and Mall nav would be here</div>

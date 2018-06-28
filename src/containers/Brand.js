@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getUserLocation } from './../actions/User';
+import SEO from './../components/SEO/SEO';
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -22,6 +23,7 @@ class Brand extends Component {
     const userHasLocation = location && location.latitude && location.longitude;
     return (
       <div className="container">
+        <SEO url="search" />
         <Link to="/search">Back To Search Results</Link>
         <h1>{'Brand Page for ' + brandName}</h1>
         {userHasLocation && (

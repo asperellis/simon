@@ -15,3 +15,11 @@ export const searchSettings = (
   }
   return state;
 };
+
+export const isLoading = (state = false, action) => {
+  if (action.type === 'SET_LOADING') {
+    return action.isLoading;
+  }
+
+  return state;
+};

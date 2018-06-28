@@ -15,16 +15,6 @@
   display: none;
 }
 
-.headerSearchSuggestions:not(.show) > * {
-  opacity: 0;
-  transition: opacity 300ms ease 0;
-}
-
-.headerSearchSuggestions.show > * {
-  opacity: 1;
-  transition: opacity 300ms ease 300ms;
-}
-
 .headerSearch.darken {
   background-color: rgba(0, 0, 0, 1);
 }

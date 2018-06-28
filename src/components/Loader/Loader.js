@@ -15,6 +15,12 @@ const Loader = ({ message = 'Loading Content...' }) => {
         />
       </svg>
       <h1>{message}</h1>
+      <p>
+        If you are seeing this in demo mode Loading is being manually set to
+        simulate a hold while a view is getting the content it needs to fully
+        render. Nice huh? Click the button to make this go away.
+      </p>
+      <button />
     </div>
   );
 };

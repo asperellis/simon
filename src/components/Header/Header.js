@@ -4,7 +4,7 @@ import { ask } from 'what-input';
 import Dropdown from './../../components/Dropdowns/Dropdown';
 import Search from './../../components/Search/Search';
 import VipLogin from './../../components/Forms/VipLogin';
-import FadeInDown from './../Animations/FadeInDown';
+import CSSTransition from './../Animations/CSSTransition';
 import styles from './Header.css';
 import SearchIcon from './../../images/icons/search.svg';
 import CloseIcon from './../../images/icons/close.svg';
@@ -19,9 +19,10 @@ export const HeaderNavVipDropdown = () => {
   return (
     <Dropdown
       text={'VIP CLUB'}
-      buttonClasses={`${styles.headerNavLink} bold`}
+      toggleClasses={`${styles.headerNavLink} bold`}
       dropOnHover={true}
       direction={'right'}
+      href={'https://premiumoutlets.com/vip'}
     >
       {docCookies.getItem('vipUser') ? (
         <div className="dropdown-menu">
@@ -282,7 +283,14 @@ class Header extends Component {
             )}
           </div>
         </div>
-        <FadeInDown in={searchSettings.include && searchOpen} duration={300}>
+        <CSSTransition
+          in={searchSettings.include && searchOpen}
+          duration={300}
+          cssProps={[
+            ['opacity', 0, 1],
+            ['transform', 'translateY(-100%)', 'translateY(0)']
+          ]}
+        >
           <Search
             canToggle={searchSettings.toggle}
             quickLinks={theme.search.quickLinks}
@@ -290,7 +298,7 @@ class Header extends Component {
             userLocation={userLocation}
             getUserLocation={getUserLocation}
           />
-        </FadeInDown>
+        </CSSTransition>
         {navOpen && (
           <div
             role={'presentation'}

@@ -135,6 +135,7 @@ const SIMON_FOOTER = new ThemeFooter(
   FOOTER_LINKS,
   SIMON_SOCIAL_NETWORKS
 );
+
 const SIMON_HEADER = new ThemeHeader(
   SimonLogo,
   HEADER_LINKS,
@@ -152,6 +153,7 @@ const PREMIUM_OUTLETS_HEADER = new ThemeHeader(
     }
   ]
 );
+
 const PREMIUM_OUTLETS_FOOTER = new ThemeFooter(
   new ThemeLink(
     'JOIN THE VIP CLUB TODAY',
@@ -181,6 +183,7 @@ const GIFTCARD_HEADER = new ThemeHeader(
   HEADER_LINKS,
   HEADER_SEARCH_QUICK_LINKS
 );
+
 const GIFTCARD_FOOTER = new ThemeFooter(
   new ThemeLink(
     'CHECK YOUR CARD BALANCE',

@@ -1,5 +1,19 @@
 export const config = {
   localhost: {
+    theme: 'simon',
+    apiUrl: 'https://api.localhost.com',
+    webUrl: 'http://localhost',
+    outletsUrl: 'http://premiumoutlets.localhost.com',
+    secureOutletsUrl: 'https://premiumoutlets.localhost.com',
+    secureWebUrl: 'https://localhost',
+    brandsUrl: 'http://brands.localhost.com',
+    businessUrl: 'http://business.localhost.com',
+    careersUrl: 'http://careers.localhost.com',
+    familyUrl: 'http://family.localhost.com',
+    vipUrl: 'https://premiumoutlets.localhost.com/vip'
+  },
+  'premiumoutlets.localhost.com': {
+    theme: 'premiumOutlets',
     apiUrl: 'https://api.localhost.com',
     webUrl: 'http://localhost',
     outletsUrl: 'http://premiumoutlets.localhost.com',
@@ -19,6 +33,7 @@ export const config = {
   },
   // for testing a prod build
   'asperellis.github.io': {
+    theme: 'simon',
     apiUrl: 'https://api.simon.com/v1.2',
     webUrl: 'http://www.simon.com',
     outletsUrl: 'http://premiumoutlets.com',

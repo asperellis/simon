@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { getUserLocation } from './../actions/User';
+import { config } from './../config';
 
 // THEMES
 import { THEMES } from './Themes';
@@ -9,7 +10,6 @@ import { THEMES } from './Themes';
 // COMPONENTS
 import { default as Header } from './../components/Header/Header';
 import Footer from './../components/Footer/Footer';
-import CookieBanner from './../components/CookieBanner/CookieBanner';
 
 // UTILS
 import 'what-input'; // tracks users input methods for a11y things
@@ -45,7 +45,7 @@ class DefaultLayout extends Component {
 
     // currently setting theme manually. this will need to change
     this.state = {
-      theme: 'premiumOutlets'
+      theme: config.theme || 'simon'
     };
   }
 
@@ -66,14 +66,14 @@ class DefaultLayout extends Component {
     const contentPad =
       1 + (user.status === 'LOGGED_IN') + !searchSettings.toggle;
     // css class to pad page content down
-    const mainClass = styles[`contentPad${contentPad}`];
+    const mainClass = theme ? styles[`contentPad${contentPad}`] : '';
     // id ref of the page content inside the layout
     const MAIN_CONTENT_ID = 'site-content';
 
     // if no theme show only the page content
     return (
       <div>
-        {theme ? (
+        {theme && (
           <div>
             <a href={`#${MAIN_CONTENT_ID}`} className={styles.skipToContent}>
               {'Skip To Content'}
@@ -85,15 +85,12 @@ class DefaultLayout extends Component {
               userLocation={user.location}
               getUserLocation={this.props.getUserLocation}
             />
-            <CookieBanner />
-            <main className={mainClass} id={MAIN_CONTENT_ID} tabIndex="-1">
-              {this.props.children}
-            </main>
-            <Footer theme={theme.footer} />
           </div>
-        ) : (
-          this.props.children
         )}
+        <main className={mainClass} id={MAIN_CONTENT_ID} tabIndex="-1">
+          {this.props.children}
+        </main>
+        {theme && <Footer theme={theme.footer} />}
       </div>
     );
   }

@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { ask } from 'what-input';
 import { debounce } from './../../utils/utils';
 import PropTypes from 'prop-types';
 import API from './../../api/api';
 import SearchIcon from './../../images/icons/search.svg';
 import NavIcon from './../../images/icons/nav.svg';
-import FadeInRight from './../Animations/FadeInRight';
-import ExpandDown from './../Animations/ExpandDown';
+import CSSTransition from './../Animations/CSSTransition';
 import styles from './Search.css';
 
 /*
@@ -73,7 +72,7 @@ const HeaderSearchForm = ({
         }}
         onBlur={() => {
           setTimeout(() => {
-            showSuggestions(query.length > 0);
+            showSuggestions(false);
           }, 150);
         }}
         onChange={updateQuery}
@@ -103,8 +102,8 @@ HeaderSearchForm.propTypes = {
   showSuggestions: method to set whether or not to show suggestions based on passing a bool param
   cursor: index of the suggestions array user is on based on keyboard navigation
   quickLinks: array from theme of links to show when there are no autocomplete suggestions
-  status: string from ExpandDown Animation component of that animations status
-  style: object of styles from ExpandDown Animation component
+  status: string from CSSTransition Animation component of that animations status
+  style: object of styles from CSSTransition Animation component
 */
 const HeaderSearchSuggestions = ({
   suggestions = null,
@@ -127,40 +126,51 @@ const HeaderSearchSuggestions = ({
   return (
     <div
       className={`${styles.headerSearchSuggestions} ${
-        status === 'entered' ? styles.show : ''
-      } ${links.length <= 0 ? styles.hide : ''}`}
+        links.length <= 0 ? styles.hide : ''
+      }`}
       style={style}
     >
       <div className="container">
-        <div className={styles.headerSearchSuggestionsContent}>
-          <div className={styles.headerSearchQuickLinksHeader}>
-            {suggestionHeaderText}
-          </div>
-          <div
-            className={`${
-              suggestions
-                ? styles.headerSearchSuggestionsList
-                : styles.headerSearchQuickLinks
-            }`}
-          >
-            {links.map((item, id) => (
-              <Link
-                to={item.href}
-                className={`${
+        <CSSTransition
+          in={status === 'entered'}
+          duration={300}
+          delay={300}
+          cssProps={[['opacity', 0, 1]]}
+        >
+          <div className={styles.headerSearchSuggestionsContent}>
+            <div className={styles.headerSearchQuickLinksHeader}>
+              {suggestionHeaderText}
+            </div>
+            <div
+              className={`${
+                suggestions
+                  ? styles.headerSearchSuggestionsList
+                  : styles.headerSearchQuickLinks
+              }`}
+            >
+              {links.map((item, id) => {
+                const linkClasses = `${
                   suggestions
                     ? styles.headerSearchSuggestionsLink
                     : styles.headerSearchQuickLink
-                } ${cursor === id + 1 && suggestions ? styles.active : ''}`}
-                key={item.text + id}
-                onClick={() => {
-                  showSuggestions(false);
-                }}
-              >
-                {item.text}
-              </Link>
-            ))}
+                } ${cursor === id + 1 && suggestions ? styles.active : ''}`;
+
+                return (
+                  <a
+                    href={item.href}
+                    className={linkClasses}
+                    key={item.text + id}
+                    onClick={() => {
+                      showSuggestions(false);
+                    }}
+                  >
+                    {item.text}
+                  </a>
+                );
+              })}
+            </div>
           </div>
-        </div>
+        </CSSTransition>
       </div>
     </div>
   );
@@ -310,17 +320,20 @@ class Search extends Component {
     if (query) {
       this.searchInput.current.value = query;
     }
-    this.searchInput.current.blur();
-    this.showSuggestions(false);
-    this.props.history.push(
-      `/search/${encodeURIComponent(
-        query.toLowerCase() || this.state.query.toLowerCase()
-      )}`
-    );
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
+
+    if (this.state.query.length > 2) {
+      this.searchInput.current.blur();
+      this.showSuggestions(false);
+      this.props.history.push(
+        `/search/${encodeURIComponent(
+          query.toLowerCase() || this.state.query.toLowerCase()
+        )}`
+      );
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
   }
 
   render() {
@@ -342,7 +355,15 @@ class Search extends Component {
       >
         <div className="container">
           <div className={styles.headerSearchBar}>
-            <FadeInRight in={this.state.mounted} duration={300} delay={200}>
+            <CSSTransition
+              in={this.state.mounted}
+              duration={300}
+              delay={200}
+              cssProps={[
+                ['opacity', 0, 1],
+                ['transform', 'translateX(5%)', 'translateX(0)']
+              ]}
+            >
               <HeaderSearchForm
                 performSearch={this.performSearch}
                 updateQuery={this.updateQuery}
@@ -352,7 +373,7 @@ class Search extends Component {
                 autoFocus={canToggle && ask() === 'mouse'}
                 inputRef={this.searchInput}
               />
-            </FadeInRight>
+            </CSSTransition>
             {userLocation && (
               <button
                 type="button"
@@ -380,14 +401,23 @@ class Search extends Component {
             )}
           </div>
         </div>
-        <ExpandDown in={this.state.showSuggestions} duration={300} delay={0}>
+        <CSSTransition
+          in={this.state.showSuggestions}
+          duration={300}
+          delay={0}
+          cssProps={[
+            ['opacity', 0, 1],
+            ['transform', 'scaleY(0)', 'scaleY(1)'],
+            ['transformOrigin', 'center top', 'center top']
+          ]}
+        >
           <HeaderSearchSuggestions
             quickLinks={quickLinks}
             suggestions={this.state.querySuggestions}
             cursor={this.state.cursor}
             showSuggestions={this.showSuggestions}
           />
-        </ExpandDown>
+        </CSSTransition>
       </div>
     );
   }

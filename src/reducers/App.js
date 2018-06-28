@@ -1,10 +1,11 @@
 import { combineReducers } from 'redux';
 import { user } from './User';
-import { searchSettings } from './UI';
+import { searchSettings, isLoading } from './UI';
 
 const appReducer = combineReducers({
   user,
-  searchSettings
+  searchSettings,
+  isLoading
 });
 
 export default appReducer;

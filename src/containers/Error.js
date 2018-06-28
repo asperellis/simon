@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { setSearchToggle } from './../actions/UI';
+import SEO from './../components/SEO/SEO';
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -20,6 +21,7 @@ class ErrorPage extends Component {
   render() {
     return (
       <div className="container">
+        <SEO url="error" />
         <h1>ErrorPage</h1>
       </div>
     );
