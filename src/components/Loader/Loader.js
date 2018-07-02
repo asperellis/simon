@@ -20,7 +20,6 @@ const Loader = ({ message = 'Loading Content...' }) => {
         simulate a hold while a view is getting the content it needs to fully
         render. Nice huh? Click the button to make this go away.
       </p>
-      <button />
     </div>
   );
 };

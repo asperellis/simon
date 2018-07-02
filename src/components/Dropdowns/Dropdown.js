@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import styles from './Dropdown.css';
 import CSSTransition from './../Animations/CSSTransition';
+import Button from './../Buttons/Button';
 import PropTypes from 'prop-types';
 
 // Dropdown Toggle Component.
@@ -15,27 +16,22 @@ const DropdownToggle = ({
   toggleDropdown = undefined,
   ...trackedEvents
 }) => {
+  let onClick = dropOnHover ? undefined : toggleDropdown;
+  const isLink = href && dropOnHover;
+  if (isLink) {
+    onClick = overwriteEvents;
+  }
+
   return (
-    <div>
-      {href && dropOnHover ? (
-        <a
-          href={href}
-          className={className}
-          onClick={overwriteEvents}
-          {...trackedEvents}
-        >
-          {text}
-        </a>
-      ) : (
-        <button
-          className={className}
-          onClick={dropOnHover ? undefined : toggleDropdown}
-          {...trackedEvents}
-        >
-          {text}
-        </button>
-      )}
-    </div>
+    <Button
+      tag={isLink ? 'a' : 'button'}
+      href={href || undefined}
+      className={className}
+      onClick={onClick}
+      {...trackedEvents}
+    >
+      {text}
+    </Button>
   );
 };
 

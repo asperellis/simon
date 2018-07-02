@@ -94,6 +94,15 @@
   cursor: pointer;
 }
 
+.headerNavBtn:hover,
+.headerSearchBtn:hover,
+.headerNavBtn:active,
+.headerSearchBtn:active,
+.headerNavBtn:focus,
+.headerSearchBtn:focus {
+  background-color: transparent;
+}
+
 .headerSearchBtn {
   margin-left: 1.9152rem;
 }

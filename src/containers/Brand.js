@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getUserLocation } from './../actions/User';
+import Button from './../components/Buttons/Button';
 import SEO from './../components/SEO/SEO';
 
 const mapDispatchToProps = dispatch => {
@@ -39,9 +40,9 @@ class Brand extends Component {
               Location is blocked OR user has manually hit this route and must
               ask for location based results again
             </p>
-            <button onClick={this.props.getUserLocation}>
-              Click To Order By Location
-            </button>
+            <Button onClick={this.props.getUserLocation}>
+              CLICK TO ORDER BY LOCATION
+            </Button>
           </div>
         )}
       </div>

@@ -6,6 +6,32 @@
   display: inline-block;
 }
 
+.dropdown .dropdownToggle:hover,
+.dropdown .dropdownToggle:active,
+.dropdown .dropdownToggle:focus {
+  background-color: transparent;
+}
+
+.dropdownToggle::after,
+.dropdownToggle::after,
+.dropdownToggle::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: var(--gray);
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out 300ms;
+}
+
+.dropdownToggle:hover::after,
+.dropdownToggle:active::after,
+.dropdownToggle:focus::after {
+  opacity: 1;
+}
+
 .dropdownContent {
   background-color: #fff;
   position: absolute;

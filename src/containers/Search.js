@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Loader from './../components/Loader/Loader';
+import Button from './../components/Buttons/Button';
 import SEO from './../components/SEO/SEO';
 import { getUserLocation } from './../actions/User';
 import { setSearchToggle, setLoading } from './../actions/UI';
@@ -50,13 +51,13 @@ class Search extends Component {
         {isLoading ? (
           <div>
             <Loader />
-            <button
+            <Button
               onClick={() => {
                 this.props.setLoading(false);
               }}
             >
-              Stop Loading
-            </button>
+              STOP LOADING
+            </Button>
           </div>
         ) : (
           <div>
@@ -82,9 +83,9 @@ class Search extends Component {
                   <p>
                     Location is blocked OR user has manually hit this route and
                     must ask for location based results again
-                    <button onClick={this.props.getUserLocation}>
+                    <Button onClick={this.props.getUserLocation}>
                       CLICK TO ASK
-                    </button>
+                    </Button>
                   </p>
                 )}
               </div>

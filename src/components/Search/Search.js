@@ -4,6 +4,7 @@ import { ask } from 'what-input';
 import { debounce } from './../../utils/utils';
 import PropTypes from 'prop-types';
 import API from './../../api/api';
+import Button from './../Buttons/Button';
 import SearchIcon from './../../images/icons/search.svg';
 import NavIcon from './../../images/icons/nav.svg';
 import CSSTransition from './../Animations/CSSTransition';
@@ -40,7 +41,7 @@ const HeaderSearchForm = ({
       className={styles.headerSearchForm}
       style={style}
     >
-      <button
+      <Button
         type="submit"
         aria-label="Search"
         className={styles.headerSearchBtn}
@@ -52,7 +53,7 @@ const HeaderSearchForm = ({
           viewBox={'0 0 23 23'}
           className={styles.headerSearchIcon}
         />
-      </button>
+      </Button>
       {!query && (
         <label htmlFor="headerSearchInput" className={styles.headerSearchLabel}>
           {'Search by center, store or location'}
@@ -375,7 +376,7 @@ class Search extends Component {
               />
             </CSSTransition>
             {userLocation && (
-              <button
+              <Button
                 type="button"
                 onClick={() => {
                   getUserLocation();
@@ -397,7 +398,7 @@ class Search extends Component {
                   className={styles.headerSearchFindNearbyIcon}
                 />
                 <span>Find Nearby Centers</span>
-              </button>
+              </Button>
             )}
           </div>
         </div>

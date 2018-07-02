@@ -4,6 +4,7 @@ import { ask } from 'what-input';
 import Dropdown from './../../components/Dropdowns/Dropdown';
 import Search from './../../components/Search/Search';
 import VipLogin from './../../components/Forms/VipLogin';
+import Button from './../Buttons/Button';
 import CSSTransition from './../Animations/CSSTransition';
 import styles from './Header.css';
 import SearchIcon from './../../images/icons/search.svg';
@@ -126,7 +127,7 @@ const HeaderSearchButton = ({
   const Icon = searchOpen ? CloseIcon : SearchIcon;
 
   return (
-    <button
+    <Button
       onClick={toggleSearch}
       onFocus={searchOpen ? undefined : toggleSearch}
       className={`${styles.headerSearchBtn} ${
@@ -141,7 +142,7 @@ const HeaderSearchButton = ({
         viewBox={'0 0 23 23'}
         className={styles.headerSearchIcon}
       />
-    </button>
+    </Button>
   );
 };
 
@@ -255,7 +256,7 @@ class Header extends Component {
         {adminLoggedIn && <AdminHeader />}
         <div className="container">
           <div className={styles.headerContent}>
-            <button
+            <Button
               aria-label="Toggle Site Navigation"
               className={`${styles.headerNavBtn} ${navOpen ? styles.open : ''}`}
               onClick={this.toggleNav}
@@ -266,7 +267,7 @@ class Header extends Component {
               }}
             >
               <span className={styles.headerNavBtnIcon} />
-            </button>
+            </Button>
             <HeaderLogo Logo={theme.logo} />
             <HeaderNav
               links={theme.links}

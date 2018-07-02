@@ -27,11 +27,35 @@
   color: #fff;
   position: relative;
   flex: 1;
+  background: transparent;
+  font-size: inherit;
+  padding: 0;
+  border: none;
+  letter-spacing: 0;
+}
+
+.headerSearchFindNearbyButton:active,
+.headerSearchFindNearbyButton:hover,
+.headerSearchFindNearbyButton:focus {
+  background-color: transparent;
 }
 
 .headerSearchBar {
   display: flex;
   align-items: center;
+}
+
+.headerSearchBtn {
+  padding: 0;
+  background: transparent;
+  border: none;
+}
+
+.headerSearchBtn:hover,
+.headerSearchBtn:active,
+.headerSearchBtn:focus {
+  background: transparent;
+  border: none;
 }
 
 .headerSearchInput {
